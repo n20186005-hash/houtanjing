@@ -1,0 +1,184 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { pages, pageBySlug, type ContentPage } from "../data/content";
+import { mapLinks, place } from "../data/site";
+
+export function getStaticPaths() {
+  return pages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+interface Props {
+  page: ContentPage;
+}
+
+const { page } = Astro.props;
+const imagePath =
+  page.image === "sunset" ? "/images/houtanjing-sunset.jpg" : "/images/houtanjing-bridge.jpg";
+const imageAlt =
+  page.image === "sunset"
+    ? "猴探井天空之橋、八卦山谷與西向夕陽"
+    : "猴探井天空之橋橫跨八卦山谷";
+const relatedPages = page.related
+  .map((slug) => pageBySlug[slug])
+  .filter((related): related is ContentPage => Boolean(related));
+const breadcrumbs = [
+  { name: "首頁", url: "/" },
+  { name: page.shortTitle, url: `/${page.slug}` },
+];
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  image={imagePath}
+  breadcrumbs={breadcrumbs}
+>
+  <header class="page-hero">
+    <div class="container page-hero-grid">
+      <div>
+        <nav class="breadcrumbs" aria-label="麵包屑導覽">
+          <a href="/">首頁</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{page.shortTitle}</span>
+        </nav>
+        <p class="eyebrow eyebrow-light">{page.eyebrow}</p>
+        <h1>{page.title}</h1>
+        <p class="page-lead">{page.lead}</p>
+        {
+          page.facts && (
+            <div class="page-facts" aria-label="頁面重點資訊">
+              {page.facts.map((fact) => (
+                <div class="page-fact">
+                  <strong>{fact.value}</strong>
+                  <span>{fact.label}</span>
+                </div>
+              ))}
+            </div>
+          )
+        }
+      </div>
+      <figure class="page-hero-image">
+        <img src={imagePath} alt={imageAlt} width="1189" height="768" loading="eager" />
+        <figcaption class="image-caption">
+          景觀影像：交通部觀光署參山國家風景區管理處
+        </figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <article class="section">
+    <div class="container article-grid">
+      <div class="article-main">
+        {
+          page.sections.map((section, index) => (
+            <section class="content-section" id={`section-${index + 1}`}>
+              {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+              <h2>{section.title}</h2>
+              {section.body && <p>{section.body}</p>}
+              {section.items && (
+                <ul class="content-list">
+                  {section.items.map((item) => <li>{item}</li>)}
+                </ul>
+              )}
+            </section>
+          ))
+        }
+
+        {
+          page.faqs && (
+            <section class="content-section" aria-labelledby="faq-page-title">
+              <p class="eyebrow">FAQ</p>
+              <h2 id="faq-page-title">最常被問的行前問題</h2>
+              <div class="faq-list" style="margin-top: 24px;">
+                {page.faqs.map((item) => (
+                  <details>
+                    <summary>{item.question}</summary>
+                    <p>{item.answer}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {
+          page.slug === "map" && (
+            <section class="content-section">
+              <p class="eyebrow">互動地圖</p>
+              <h2>猴探井天空之橋位置</h2>
+              <p>
+                {place.address}。地圖載入後可縮放查看周邊道路；規劃路線請使用下方導航按鈕。
+              </p>
+              <div class="map-article" style="margin-top: 26px;">
+                <iframe
+                  src={mapLinks.embed}
+                  title="猴探井天空之橋 Google 地圖"
+                  width="600"
+                  height="450"
+                  style="border:0;"
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                />
+              </div>
+              <div class="map-actions">
+                <a
+                  class="btn btn-dark"
+                  href={mapLinks.search}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  在 Google 地圖開啟
+                </a>
+                <a
+                  class="btn btn-outline"
+                  href={mapLinks.directions}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  從目前位置導航
+                </a>
+              </div>
+            </section>
+          )
+        }
+
+        {page.callout && <aside class="callout">{page.callout}</aside>}
+      </div>
+
+      <aside class="article-aside" aria-label="本頁內容">
+        <strong>本頁內容</strong>
+        {
+          page.sections.map((section, index) => (
+            <a href={`#section-${index + 1}`}>{section.title}</a>
+          ))
+        }
+        {page.faqs && <a href="#faq-page-title">常見問題</a>}
+        <a href={mapLinks.search} target="_blank" rel="noopener noreferrer">
+          開啟 Google 地圖 ↗
+        </a>
+      </aside>
+    </div>
+  </article>
+
+  {
+    relatedPages.length > 0 && (
+      <section class="related-wrap">
+        <div class="container">
+          <h2>接著規劃</h2>
+          <div class="related-grid">
+            {relatedPages.map((related) => (
+              <a class="related-card" href={`/${related.slug}`}>
+                <span>READ NEXT</span>
+                {related.shortTitle}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

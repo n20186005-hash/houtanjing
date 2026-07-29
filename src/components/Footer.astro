@@ -1,0 +1,35 @@
+---
+import { mapLinks, navigation } from "../data/site";
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="footer-brand" href="/">
+          <img src="/logo-mark.svg" width="72" height="48" alt="" />
+          <span>HOUTANJING</span>
+        </a>
+        <p class="footer-intro">
+          走過微笑天梯，看見八卦山另一面的風景。把交通、停車、階梯難度、夕陽與 139
+          縣道順遊一次規劃好。
+        </p>
+      </div>
+      <div class="footer-column">
+        <strong>PLAN YOUR VISIT</strong>
+        {
+          navigation.slice(0, 4).map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))
+        }
+      </div>
+      <div class="footer-column">
+        <strong>QUICK LINKS</strong>
+        <a href="/map">地址與地圖</a>
+        <a href="/accessibility">同行評估</a>
+        <a href="/history">名稱與故事</a>
+        <a href={mapLinks.directions} target="_blank" rel="noopener noreferrer">開始導航</a>
+      </div>
+    </div>
+  </div>
+</footer>

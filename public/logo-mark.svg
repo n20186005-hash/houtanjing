@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 48" role="img" aria-labelledby="title">
+  <title id="title">猴探井天空之橋標誌</title>
+  <path d="M7 12c12 0 14 25 29 25s17-25 29-25" fill="none" stroke="#d87938" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M8 8v12M64 8v12" stroke="#285447" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M15 18h42" stroke="#285447" stroke-width="1.5" stroke-dasharray="2.5 3"/>
+</svg>

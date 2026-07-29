@@ -1,0 +1,125 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import MobileMapBar from "../components/MobileMapBar.astro";
+import "../styles/global.css";
+import { place, site } from "../data/site";
+
+interface Breadcrumb {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  breadcrumbs?: Breadcrumb[];
+}
+
+const {
+  title,
+  description,
+  image = "/images/houtanjing-bridge.jpg",
+  breadcrumbs = [{ name: "首頁", url: "/" }],
+} = Astro.props;
+
+const pageTitle = title.includes(site.name) ? title : `${title}｜${site.name}`;
+const canonical = new URL(Astro.url.pathname, site.url).toString();
+const absoluteImage = new URL(image, site.url).toString();
+const currentPath = Astro.url.pathname;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#website`,
+      url: `${site.url}/`,
+      name: site.name,
+      alternateName: "猴探井天空之橋旅遊指南",
+      inLanguage: "zh-Hant-TW",
+    },
+    {
+      "@type": "TouristAttraction",
+      "@id": `${site.url}/#attraction`,
+      name: place.name,
+      alternateName: ["微笑天梯", place.englishName],
+      description: site.description,
+      image: [
+        `${site.url}/images/houtanjing-bridge.jpg`,
+        `${site.url}/images/houtanjing-sunset.jpg`,
+      ],
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "猴探井街300號",
+        addressLocality: "南投市",
+        addressRegion: "南投縣",
+        postalCode: "540",
+        addressCountry: "TW",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: place.latitude,
+        longitude: place.longitude,
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: breadcrumbs.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.name,
+        item: new URL(item.url, site.url).toString(),
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#193a32" />
+
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        window.dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-HXM22WWPKP");
+    </script>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={absoluteImage} />
+    <meta property="og:image:alt" content="猴探井天空之橋橫跨八卦山谷" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteImage} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+  </head>
+  <body>
+    <Header currentPath={currentPath} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+    <MobileMapBar />
+  </body>
+</html>

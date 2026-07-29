@@ -1,0 +1,58 @@
+---
+import { mapLinks, navigation } from "../data/site";
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = "/" } = Astro.props;
+const isCurrent = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+---
+
+<a class="skip-link" href="#main-content">跳到主要內容</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="Houtanjing 猴探井天空之橋首頁">
+      <img src="/logo-mark.svg" width="72" height="48" alt="" />
+      <span class="brand-word">
+        <strong>Houtanjing</strong>
+        <small>猴探井天空之橋</small>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="主要導覽">
+      {
+        navigation.map((item) => (
+          <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+      <a class="nav-map" href={mapLinks.search} target="_blank" rel="noopener noreferrer">
+        Google 地圖
+      </a>
+    </nav>
+
+    <details class="mobile-menu">
+      <summary aria-label="開啟導覽選單"><span class="menu-icon"></span></summary>
+      <nav class="mobile-panel" aria-label="行動版導覽">
+        {
+          navigation.map((item) => (
+            <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
+        <a
+          class="mobile-map-link"
+          href={mapLinks.search}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          開啟 Google 地圖
+        </a>
+      </nav>
+    </details>
+  </div>
+</header>

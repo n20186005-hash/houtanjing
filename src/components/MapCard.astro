@@ -1,0 +1,33 @@
+---
+import { mapLinks, place } from "../data/site";
+---
+
+<section class="map-card" aria-labelledby="map-heading">
+  <div class="map-copy">
+    <p class="eyebrow">Google 地圖</p>
+    <h2 id="map-heading">位置與導航，<br />一按就出發</h2>
+    <p>出發前可同時查看目前營業狀態、即時道路與近期旅客資訊。</p>
+    <address>{place.address}</address>
+    <div class="map-actions">
+      <a class="btn btn-dark" href={mapLinks.search} target="_blank" rel="noopener noreferrer">
+        在 Google 地圖開啟
+      </a>
+      <a class="btn btn-outline" href={mapLinks.directions} target="_blank" rel="noopener noreferrer">
+        開始導航
+      </a>
+    </div>
+  </div>
+  <div class="map-stage">
+    <iframe
+      class="map-embed"
+      src={mapLinks.embed}
+      title="猴探井天空之橋 Google 地圖"
+      width="600"
+      height="450"
+      style="border:0;"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+  </div>
+</section>
