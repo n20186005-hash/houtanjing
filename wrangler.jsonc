@@ -1,0 +1,22 @@
+{
+  // Cloudflare Workers (Static Assets) 部署配置
+  // 由 Cloudflare Pages 迁移而来：移除 _redirects / _headers，
+  // 改由 src/worker.js 统一处理重定向、安全响应头与静态资源服务。
+  "name": "houtanjing",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-07-22",
+
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // 与 Astro 的 trailingSlash: "never" 配合：
+    // foo.html 不带尾部斜杠直接服务，foo/index.html 带斜杠服务。
+    "html_handling": "auto-trailing-slash"
+  },
+
+  // 让 Worker 在每个请求前先运行（执行重定向 / 注入响应头），
+  // 再由其内部通过 env.ASSETS.fetch() 回源静态资源。
+  // 注意：此处刻意不设置 not_found_handling，以免触发
+  // “导航请求绕过 Worker” 的优化导致重定向失效；404 由 Worker 内回退 404.html。
+  "run_worker_first": ["/*"]
+}
