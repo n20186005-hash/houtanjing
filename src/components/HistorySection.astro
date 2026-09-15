@@ -1,0 +1,31 @@
+---
+import { HISTORY_BLOCKS } from "../data/knowledge";
+---
+
+<section class="history" aria-labelledby="history-heading">
+  <div class="container">
+    <div class="history-head">
+      <p class="eyebrow">景點背景知識</p>
+      <h2 id="history-heading">
+        從地名、橋、到山谷的故事
+      </h2>
+      <p>
+        整理猴探井地名的民間說法、天空之橋的工程原理、八卦山台地的地理背景，以及淺山生態觀察，作為造訪前的科普素材。
+      </p>
+    </div>
+
+    <div class="history-grid">
+      {
+        HISTORY_BLOCKS.map((block, idx) => (
+          <article class={`history-card history-card--${idx % 2 === 0 ? "left" : "right"}`}>
+            <span class="history-eyebrow">{block.eyebrow}</span>
+            <h3>{block.title}</h3>
+            {block.body.map((p) => (
+              <p>{p}</p>
+            ))}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

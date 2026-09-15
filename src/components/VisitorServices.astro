@@ -1,0 +1,33 @@
+---
+import { VISITOR_SERVICES } from "../data/facilities";
+---
+
+<section class="services" aria-labelledby="services-heading">
+  <div class="container">
+    <div class="services-head">
+      <p class="eyebrow">訪客服務</p>
+      <h2 id="services-heading">
+        行程中，可能會需要的事
+      </h2>
+      <p>整理旅人於行程中可能需要的基礎服務類型與緊急聯絡方式，作為出發前快速複習。</p>
+    </div>
+
+    <ul class="service-list">
+      {
+        VISITOR_SERVICES.map((item) => (
+          <li>
+            <span class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d={item.icon}></path>
+              </svg>
+            </span>
+            <div>
+              <strong>{item.title}</strong>
+              <p>{item.description}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

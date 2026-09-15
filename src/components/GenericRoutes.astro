@@ -1,0 +1,41 @@
+---
+import { GENERIC_PLANS } from "../data/visitor-routes";
+---
+
+<section class="generic-routes" aria-labelledby="generic-heading">
+  <div class="container">
+    <div class="generic-head">
+      <p class="eyebrow">推薦通用遊覽路線</p>
+      <h2 id="generic-heading">
+        半日或全日，<br />兩種節奏都幫你想好了
+      </h2>
+      <p>依照停留時間與同行需求，從兩種通用動線中選擇；不過是初訪或深度遊，都能找到對應的安排。</p>
+    </div>
+
+    <div class="generic-grid">
+      {
+        GENERIC_PLANS.map((plan) => (
+          <article class="generic-plan">
+            <header>
+              <span class="generic-badge">{plan.badge}</span>
+              <h3>{plan.title}</h3>
+              <p class="generic-highlight">{plan.highlight}</p>
+              <span class="generic-time">{plan.totalTime}</span>
+            </header>
+            <ol class="generic-timeline">
+              {plan.blocks.map((block) => (
+                <li>
+                  <span class="generic-time-tag">{block.time}</span>
+                  <div>
+                    <strong>{block.title}</strong>
+                    <p>{block.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

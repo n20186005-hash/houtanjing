@@ -3,11 +3,16 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import MobileMapBar from "../components/MobileMapBar.astro";
 import "../styles/global.css";
-import { place, site } from "../data/site";
+import { mapLinks, place, reviews, site } from "../data/site";
 
 interface Breadcrumb {
   name: string;
   url: string;
+}
+
+interface FAQ {
+  question: string;
+  answer: string;
 }
 
 interface Props {
@@ -15,6 +20,7 @@ interface Props {
   description: string;
   image?: string;
   breadcrumbs?: Breadcrumb[];
+  faqs?: FAQ[];
 }
 
 const {
@@ -22,6 +28,7 @@ const {
   description,
   image = "/images/houtanjing-bridge.jpg",
   breadcrumbs = [{ name: "首頁", url: "/" }],
+  faqs,
 } = Astro.props;
 
 const pageTitle = title.includes(site.name) ? title : `${title}｜${site.name}`;
@@ -29,6 +36,21 @@ const canonical = new URL(Astro.url.pathname, site.url).toString();
 const absoluteImage = new URL(image, site.url).toString();
 const currentPath = Astro.url.pathname;
 
+// 預設 FAQ（用於 FAQPage JSON-LD，僅在有傳入或本頁有 FAQ 時輸出）
+const defaultFaqs: FAQ[] = faqs ?? [];
+const faqEntities = defaultFaqs.map((item) => ({
+  "@type": "Question",
+  name: item.question,
+  acceptedAnswer: {
+    "@type": "Answer",
+    text: item.answer,
+  },
+}));
+
+// JSON-LD：WebSite / TouristAttraction / BreadcrumbList / FAQPage
+// 依單一景點 SEO 實體綁定規範，集中輸出以下節點：
+//   - TouristAttraction（含 @id / image / isAccessibleForFree / address / geo）
+//   - 不輸出 AggregateRating（避免冒充 / 同步評價僅以前台文字呈現）
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -44,19 +66,52 @@ const structuredData = {
       "@type": "TouristAttraction",
       "@id": `${site.url}/#attraction`,
       name: place.name,
-      alternateName: ["微笑天梯", place.englishName],
-      description: site.description,
+      alternateName: place.alternateNames,
+      description:
+        `${place.name}（${place.shortName}）位於 ${place.city}，${place.state}，${place.countryName}。本指南整理交通、停車、${place.nearbyLandmarks.landmark1}、${place.nearbyLandmarks.landmark2}、139 縣道順遊與夕陽拍照建議。`,
+      url: site.url,
       image: [
         `${site.url}/images/houtanjing-bridge.jpg`,
         `${site.url}/images/houtanjing-sunset.jpg`,
       ],
+      isAccessibleForFree: true,
+      publicAccess: true,
       address: {
         "@type": "PostalAddress",
-        streetAddress: "猴探井街300號",
-        addressLocality: "南投市",
-        addressRegion: "南投縣",
-        postalCode: "540",
-        addressCountry: "TW",
+        streetAddress: place.streetAddress,
+        addressLocality: place.city,
+        addressRegion: place.state,
+        postalCode: place.postalCode,
+        addressCountry: place.countryCode,
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: place.latitude,
+        longitude: place.longitude,
+      },
+      telephone: place.phone,
+      hasMap: mapLinks.search,
+      sameAs: [
+        mapLinks.search,
+        place.governmentTourismUrl,
+      ],
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: `${place.state} ${place.city}`,
+      },
+    },
+    {
+      "@type": "Place",
+      "@id": `${site.url}/#place`,
+      name: place.name,
+      alternateName: place.alternateNames,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: place.streetAddress,
+        addressLocality: place.city,
+        addressRegion: place.state,
+        postalCode: place.postalCode,
+        addressCountry: place.countryCode,
       },
       geo: {
         "@type": "GeoCoordinates",
@@ -73,8 +128,29 @@ const structuredData = {
         item: new URL(item.url, site.url).toString(),
       })),
     },
+    ...(faqEntities.length > 0
+      ? [
+          {
+            "@type": "FAQPage",
+            "@id": `${canonical}#faq`,
+            mainEntity: faqEntities,
+          },
+        ]
+      : []),
   ],
 };
+
+// 預先將所有「Google 外部連結」匯出為物件（保留原本就有的連結 + 新增的評價連結）
+const googleExternalLinks = {
+  maps: mapLinks.search,
+  directions: mapLinks.directions,
+  reviews: mapLinks.reviews,
+  embed: mapLinks.embed,
+};
+
+// 提示開發者：reviews 物件僅供前台文字顯示，不要把 AggregateRating 寫進結構化資料。
+void reviews;
+void googleExternalLinks;
 ---
 
 <!doctype html>
@@ -90,6 +166,35 @@ const structuredData = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#193a32" />
 
+    <!-- PWA：Web App Manifest（新增 PWA 支援） -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content={site.name} />
+    <meta name="application-name" content={site.name} />
+    <link rel="apple-touch-startup-image" href="/apple-touch-icon.png" />
+
+    <!-- 標準 TDK / Open Graph / Twitter Card（單一景點 SEO 實體綁定） -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={absoluteImage} />
+    <meta
+      property="og:image:alt"
+      content={`${place.name}（${place.city}）橫跨八卦山谷 — ${place.shortName} 全景`}
+    />
+    <meta property="og:image:width" content="1189" />
+    <meta property="og:image:height" content="768" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteImage} />
+
+    <!-- Google Analytics 4：G-HXM22WWPKP -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
@@ -100,19 +205,12 @@ const structuredData = {
       gtag("config", "G-HXM22WWPKP");
     </script>
 
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="zh_TW" />
-    <meta property="og:site_name" content={site.name} />
-    <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={absoluteImage} />
-    <meta property="og:image:alt" content="猴探井天空之橋橫跨八卦山谷" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={absoluteImage} />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+    <!-- 結構化資料（JSON-LD）：WebSite / TouristAttraction / Place / Breadcrumb / FAQPage -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(structuredData)}
+    ></script>
   </head>
   <body>
     <Header currentPath={currentPath} />
@@ -121,5 +219,17 @@ const structuredData = {
     </main>
     <Footer />
     <MobileMapBar />
+    <script is:inline>
+      // PWA Service Worker（新增 PWA 支援）：靜態資源快取、離線可用
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sw.js", { scope: "/" })
+            .catch(() => {
+              /* ignore */
+            });
+        });
+      }
+    </script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 ---
-import { mapLinks, navigation } from "../data/site";
+import { mapLinks, navigation, place, reviews } from "../data/site";
 ---
 
 <footer class="site-footer">
@@ -29,6 +29,45 @@ import { mapLinks, navigation } from "../data/site";
         <a href="/accessibility">同行評估</a>
         <a href="/history">名稱與故事</a>
         <a href={mapLinks.directions} target="_blank" rel="noopener noreferrer">開始導航</a>
+      </div>
+    </div>
+
+    <div class="footer-meta">
+      <div class="footer-meta-block">
+        <strong>資料來源</strong>
+        <ul>
+          <li>
+            <span>圖片</span>
+            <p>本站所展示的所有圖片，產權及版權均歸原攝影者所有。</p>
+          </li>
+          <li>
+            <span>評價 · 同步時間 {reviews.syncedAtLabel}</span>
+            <p>{reviews.sourceNote}</p>
+            <a href={mapLinks.reviews} target="_blank" rel="noopener noreferrer">
+              在 Google 地圖查看全部評價 ↗
+            </a>
+          </li>
+          <li>
+            <span>官方觀光</span>
+            <a
+              href={place.governmentTourismUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              參山國家風景區管理處 — {place.name}官方頁 ↗
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-meta-block">
+        <strong>免責與聲明</strong>
+        <p>
+          Houtanjing.com 為獨立旅遊資訊網站，並非 {place.name} 營運或售票單位。
+          景點開放、票價、停車及現場狀況可能調整，出發前請透過 Google 地圖或現場單位確認。
+        </p>
+        <p class="footer-copy">
+          © {new Date().getFullYear()} Houtanjing.com · 圖片版權歸原攝影者所有
+        </p>
       </div>
     </div>
   </div>

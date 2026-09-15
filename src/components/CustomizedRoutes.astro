@@ -1,0 +1,124 @@
+---
+import { ROUTE_PLANS } from "../data/visitor-routes";
+---
+
+<section class="routes" aria-labelledby="routes-heading">
+  <div class="container">
+    <div class="routes-head">
+      <p class="eyebrow">按人群定制的遊覽方案</p>
+      <h2 id="routes-heading">
+        帶誰同行，<br />就選哪一條
+      </h2>
+      <p>依出行構成、節奏與體力狀況，從三條代表性路線中選擇最合適的一條。</p>
+    </div>
+
+    <div class="routes-tabs" role="tablist">
+      {
+        ROUTE_PLANS.map((plan, idx) => (
+          <button
+            type="button"
+            class={`routes-tab ${idx === 0 ? "is-active" : ""}`}
+            role="tab"
+            aria-selected={idx === 0 ? "true" : "false"}
+            data-route-tab={plan.group}
+          >
+            <span>{plan.badge}</span>
+            <strong>{plan.title}</strong>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="routes-panels">
+      {
+        ROUTE_PLANS.map((plan, idx) => (
+          <article
+            class={`routes-panel ${idx === 0 ? "is-active" : ""}`}
+            role="tabpanel"
+            data-route-panel={plan.group}
+          >
+            <header class="routes-panel-head">
+              <div>
+                <p class="routes-panel-eyebrow">{plan.badge} · {plan.difficultyLabel}</p>
+                <h3>{plan.subtitle}</h3>
+                <p>{plan.lead}</p>
+              </div>
+              <dl class="routes-panel-meta">
+                <div>
+                  <dt>總時間</dt>
+                  <dd>{plan.totalTime}</dd>
+                </div>
+                <div>
+                  <dt>節奏</dt>
+                  <dd>{plan.pace}</dd>
+                </div>
+              </dl>
+            </header>
+
+            <p class="routes-panel-note">
+              <strong>節奏建議：</strong>
+              {plan.paceNote}
+            </p>
+
+            <div class="routes-panel-grid">
+              <section>
+                <h4>行程節點</h4>
+                <ol class="routes-stops">
+                  {plan.stops.map((stop) => (
+                    <li>
+                      <span class="routes-stop-time">{stop.time}</span>
+                      <div>
+                        <strong>{stop.place}</strong>
+                        <p>{stop.note}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+
+              <aside class="routes-side">
+                <section>
+                  <h4>建議攜帶</h4>
+                  <ul class="routes-bring">
+                    {plan.bringItems.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </section>
+                <section>
+                  <h4>建議避開</h4>
+                  <ul class="routes-avoid">
+                    {plan.avoid.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </section>
+              </aside>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const tabs = document.querySelectorAll("[data-route-tab]");
+    const panels = document.querySelectorAll("[data-route-panel]");
+    if (tabs.length === 0) return;
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.getAttribute("data-route-tab");
+        tabs.forEach((t) => {
+          t.classList.toggle("is-active", t === tab);
+          t.setAttribute("aria-selected", t === tab ? "true" : "false");
+        });
+        panels.forEach((p) => {
+          p.classList.toggle("is-active", p.getAttribute("data-route-panel") === target);
+        });
+      });
+    });
+  })();
+</script>

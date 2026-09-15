@@ -1,0 +1,45 @@
+---
+import { FACILITY_TYPES, FACILITY_PRINCIPLES } from "../data/facilities";
+---
+
+<section class="facilities" aria-labelledby="facilities-heading">
+  <div class="container">
+    <div class="facilities-head">
+      <p class="eyebrow">周邊設施</p>
+      <h2 id="facilities-heading">
+        旅人關心的設施，<br />依類型整理
+      </h2>
+      <p>
+        為保持中立與客觀，本區塊僅列出常見設施類型，不推薦特定商家、品牌或營業單位。實際可選擇的具體地點，請以現場為準。
+      </p>
+    </div>
+
+    <ul class="facility-list">
+      {
+        FACILITY_TYPES.map((item) => (
+          <li>
+            <span class="facility-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d={item.icon}></path>
+              </svg>
+            </span>
+            <div>
+              <strong>{item.title}</strong>
+              <p>{item.description}</p>
+              <span class="facility-location">常見位置：{item.location}</span>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <aside class="facility-principles">
+      <strong>使用原則</strong>
+      <ul>
+        {FACILITY_PRINCIPLES.map((p) => (
+          <li>{p}</li>
+        ))}
+      </ul>
+    </aside>
+  </div>
+</section>

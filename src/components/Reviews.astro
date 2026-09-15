@@ -1,0 +1,67 @@
+---
+import { mapLinks, reviews } from "../data/site";
+
+// Google 地圖用戶評價區塊（前台顯示，不寫入 JSON-LD）
+//
+// 評分與評價數僅以「同步自 Google 地圖（Google Maps）」方式呈現，
+// 並於頁面上明列來源、同步時間與版權歸屬，避免觸發 Google 第三方評論政策。
+const ratingLabel = reviews.rating.toFixed(1);
+const countLabel = reviews.count.toLocaleString("zh-TW");
+---
+
+<section class="reviews" aria-labelledby="reviews-heading">
+  <div class="reviews-card">
+    <div class="reviews-head">
+      <p class="eyebrow">Google 地圖評價</p>
+      <h2 id="reviews-heading">
+        出發前，看看其他人怎麼說
+      </h2>
+      <p class="reviews-lead">
+        下方評分與評價數同步自 Google 地圖（Google Maps）用戶評價，僅作為參考。
+        評論原文、撰寫時間與作者資訊請至 Google 地圖查看。
+      </p>
+    </div>
+
+    <div class="reviews-stats">
+      <div class="reviews-figure">
+        <strong>
+          <span class="reviews-rating">{ratingLabel}</span>
+          <span class="reviews-rating-max">/ 5</span>
+        </strong>
+        <div class="reviews-stars" aria-hidden="true">
+          {
+            Array.from({ length: 5 }).map((_, i) => {
+              const fill = Math.max(0, Math.min(1, reviews.rating - i));
+              return (
+                <span
+                  class={`reviews-star ${fill >= 0.75 ? "is-full" : fill >= 0.25 ? "is-half" : ""}`}
+                />
+              );
+            })
+          }
+        </div>
+        <span class="reviews-count">{countLabel} 則 Google 地圖評價</span>
+      </div>
+
+      <div class="reviews-meta">
+        <p class="reviews-source">
+          <strong>評分與評價數同步自 Google 地圖（Google Maps）用戶評價 · {reviews.syncedAtLabel} · 點擊查看 Google 地圖全部評價↗</strong>
+        </p>
+        <p class="reviews-copyright">
+          同步自 Google 地圖用戶評價，同步時間 {reviews.syncedAtLabel}；版權歸原作者與 Google 地圖所有。
+        </p>
+        <a
+          class="btn btn-dark"
+          href={mapLinks.reviews}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          在 Google 地圖查看全部評價
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

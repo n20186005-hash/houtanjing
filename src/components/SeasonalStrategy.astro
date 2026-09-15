@@ -1,0 +1,95 @@
+---
+import { SEASONS, SEASON_NOTE } from "../data/seasons";
+---
+
+<section class="seasonal" aria-labelledby="seasonal-heading">
+  <div class="container">
+    <div class="seasonal-head">
+      <p class="eyebrow">季度遊覽策略</p>
+      <h2 id="seasonal-heading">
+        一年四季，<br />哪個時候最適合？
+      </h2>
+      <p>
+        整理八卦山南稜全年氣象、人潮與生態觀察重點，幫助你挑選最合適的造訪時段。所有平均值以中央氣象署南投站長期觀測為基礎，實際天氣仍以當週預報與現場公告為準。
+      </p>
+    </div>
+
+    <div class="seasonal-table" role="table" aria-label="季度遊覽策略表">
+      <div class="seasonal-row seasonal-row--head" role="row">
+        <span role="columnheader">季節</span>
+        <span role="columnheader">月份</span>
+        <span role="columnheader">平均溫度</span>
+        <span role="columnheader">降雨特性</span>
+        <span role="columnheader">人潮</span>
+        <span role="columnheader">推薦指數</span>
+      </div>
+      {
+        SEASONS.map((row) => (
+          <article class="seasonal-row" role="row">
+            <div role="cell" class="seasonal-cell seasonal-cell--name">
+              <strong>{row.name}</strong>
+              <span class="seasonal-wild">{row.wildlifeNote}</span>
+            </div>
+            <div role="cell" class="seasonal-cell">
+              <span class="seasonal-mobile-label">月份</span>
+              {row.months}
+            </div>
+            <div role="cell" class="seasonal-cell">
+              <span class="seasonal-mobile-label">平均溫度</span>
+              <span>{row.averageHigh}</span>
+              <span class="seasonal-cell-low">低溫 {row.averageLow}</span>
+            </div>
+            <div role="cell" class="seasonal-cell">
+              <span class="seasonal-mobile-label">降雨特性</span>
+              {row.rainfallNote}
+            </div>
+            <div role="cell" class="seasonal-cell">
+              <span class="seasonal-mobile-label">人潮</span>
+              <span class={`seasonal-crowd seasonal-crowd--${row.crowdLevel}`}>
+                {row.crowdLabel}
+              </span>
+            </div>
+            <div role="cell" class="seasonal-cell">
+              <span class="seasonal-mobile-label">推薦指數</span>
+              <span class="seasonal-stars" aria-label={`推薦指數 ${row.recommendIndex} 顆星`}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span class={i < row.recommendIndex ? "is-on" : ""}>★</span>
+                ))}
+              </span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="seasonal-detail">
+      {
+        SEASONS.map((row) => (
+          <details>
+            <summary>
+              <strong>{row.name}</strong>
+              <span>{row.bestMoment}</span>
+            </summary>
+            <div class="seasonal-detail-body">
+              <p>
+                <strong>最佳時段：</strong>
+                {row.bestMoment}
+              </p>
+              <p>
+                <strong>生態觀察：</strong>
+                {row.wildlifeNote}
+              </p>
+              <ul>
+                {row.tips.map((tip) => (
+                  <li>{tip}</li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+
+    <p class="seasonal-note">{SEASON_NOTE}</p>
+  </div>
+</section>

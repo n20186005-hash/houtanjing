@@ -1,0 +1,84 @@
+---
+import { mapLinks, place, reviews } from "../data/site";
+
+// 資料來源區塊（E-E-A-T / Google 第三方政策友善）
+//
+// 列舉本站引用之外部資料來源，含：
+//   1. 圖片版權
+//   2. 評價來源（Google Maps）
+//   3. 政府／官方觀光
+//   4. 地圖資料
+const sources = [
+  {
+    label: "圖片",
+    detail:
+      "本站所展示的所有圖片，產權及版權均歸原攝影者與所屬管理單位所有。",
+    link: {
+      href: place.governmentTourismUrl,
+      label: place.governmentTourismLabel,
+      external: true,
+    },
+  },
+  {
+    label: "評價",
+    detail: `${reviews.sourceNote}（同步時間 ${reviews.syncedAtLabel}）`,
+    link: {
+      href: mapLinks.reviews,
+      label: "在 Google 地圖查看全部評價",
+      external: true,
+    },
+  },
+  {
+    label: "官方觀光",
+    detail: "景點基本資料引用自交通部觀光署參山國家風景區管理處。",
+    link: {
+      href: place.governmentTourismUrl,
+      label: "參山國家風景區管理處 — 猴探井天空之橋",
+      external: true,
+    },
+  },
+  {
+    label: "地圖資料",
+    detail: "地址、座標、導航與嵌入地圖皆由 Google 地圖提供。",
+    link: {
+      href: mapLinks.search,
+      label: "在 Google 地圖開啟",
+      external: true,
+    },
+  },
+];
+---
+
+<section class="sources" aria-labelledby="sources-heading">
+  <div class="container">
+    <div class="sources-card">
+      <p class="eyebrow">資料來源</p>
+      <h2 id="sources-heading">本站引用與授權</h2>
+      <p class="sources-lead">
+        本網站為獨立旅遊資訊站，所有引用之外部資料皆標明出處與同步時間。
+        若您是資料來源之權利方，並希望調整引用方式，歡迎透過頁尾資訊與我們聯繫。
+      </p>
+      <ul class="sources-list">
+        {
+          sources.map((item) => (
+            <li>
+              <strong>{item.label}</strong>
+              <p>{item.detail}</p>
+              <a
+                href={item.link.href}
+                target={item.link.external ? "_blank" : undefined}
+                rel={item.link.external ? "noopener noreferrer" : undefined}
+              >
+                {item.link.label}
+                {item.link.external && <span aria-hidden="true"> ↗</span>}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="sources-copyright">
+        網站所展示的所有圖片，產權及版權均歸原攝影者所有。
+      </p>
+    </div>
+  </div>
+</section>

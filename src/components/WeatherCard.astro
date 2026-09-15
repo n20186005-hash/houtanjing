@@ -1,0 +1,514 @@
+---
+// WeatherCard.astro
+//
+// 面向普通遊客的天氣建議模組：
+//   - 資料由本站 /api/weather 提供（Worker 邊緣快取 30 分鐘，見 src/worker.js）
+//   - 不顯示任何「API / 金鑰 / 計費 / 商業」字樣
+//   - 動態渲染：只顯示與當前 / 即時條件相符的建議條目
+//   - 三大面向：出行穿搭、遊玩安排、隨身物品；風險提醒獨立置頂、紅色樣式
+//   - 山地場景：針對淺山、吊橋、階梯、雲海、能見度等調整提醒強度
+import { place } from "../data/site";
+---
+
+<section class="weather-card" aria-labelledby="weather-heading">
+  <div class="weather-card-inner">
+    <div class="weather-head">
+      <p class="eyebrow">即時天氣與七日預報</p>
+      <h2 id="weather-heading">
+        出門前，看一下<strong>{place.shortName}</strong>的天氣
+      </h2>
+      <p>
+        從體感、出門穿搭、要不要帶傘，到山區吊橋與階梯是否適合行走，把最容易影響遊程的天氣因素整理成可執行的建議。
+      </p>
+    </div>
+
+    <div class="weather-body" id="weather-display">
+      <div class="weather-loading" aria-live="polite">
+        <span class="weather-spinner" aria-hidden="true"></span>
+        <span>正在讀取最新天氣資料…</span>
+      </div>
+    </div>
+
+    <div class="weather-foot">
+      <span id="weather-updated" class="weather-updated">最後更新：讀取中…</span>
+      <span class="weather-cache-hint">資料於本站伺服器每 30 分鐘更新一次</span>
+    </div>
+  </div>
+</section>
+
+<template id="weather-template">
+  <!-- 風險提醒（只在有條件時插入，紅色置頂） -->
+  <div class="weather-alerts" data-alerts hidden></div>
+
+  <div class="weather-grid">
+    <!-- 左：當前天氣 + 智慧建議 -->
+    <article class="weather-current">
+      <p class="weather-current-label">目前天氣</p>
+      <div class="weather-current-main">
+        <svg
+          class="weather-current-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path data-weather-icon d="M7 18a4 4 0 010-8 5 5 0 019.6-1.5A4 4 0 0117 18H7z"></path>
+        </svg>
+        <div class="weather-current-text">
+          <p class="weather-current-temp">
+            <span data-weather-temp>--</span><small>°C</small>
+          </p>
+          <p class="weather-current-desc" data-weather-desc>—</p>
+        </div>
+      </div>
+
+      <ul class="weather-current-stats">
+        <li>
+          <span>體感</span>
+          <strong><span data-weather-feel>--</span>°C</strong>
+        </li>
+        <li>
+          <span>風速</span>
+          <strong><span data-weather-wind>--</span> km/h</strong>
+        </li>
+        <li>
+          <span>降雨</span>
+          <strong><span data-weather-precip>--</span> mm</strong>
+        </li>
+        <li>
+          <span>濕度</span>
+          <strong><span data-weather-humidity>--</span>%</strong>
+        </li>
+      </ul>
+
+      <!-- 智慧建議四大區塊（動態） -->
+      <div class="weather-advice">
+        <section class="advice-block" data-advice-clothes hidden>
+          <h4 class="advice-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7l3-3 4 4 4-4 3 3v12H5V7z"></path></svg>
+            出行穿搭
+          </h4>
+          <ul class="advice-list" data-advice-clothes-list></ul>
+        </section>
+
+        <section class="advice-block" data-advice-play hidden>
+          <h4 class="advice-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16M4 19l5-9 4 6 3-4 4 7"></path></svg>
+            遊玩安排
+          </h4>
+          <ul class="advice-list" data-advice-play-list></ul>
+        </section>
+
+        <section class="advice-block" data-advice-gear hidden>
+          <h4 class="advice-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8zM9 8V5a3 3 0 016 0v3"></path></svg>
+            隨身物品
+          </h4>
+          <ul class="advice-list" data-advice-gear-list></ul>
+        </section>
+      </div>
+    </article>
+
+    <!-- 右：七日預報 -->
+    <article class="weather-forecast">
+      <p class="weather-forecast-label">未來七日</p>
+      <ol class="weather-forecast-list" data-forecast-list></ol>
+    </article>
+  </div>
+</template>
+
+<script
+  is:inline
+  define:vars={{
+    shortName: place.shortName,
+    city: place.city,
+  }}
+>
+  (function () {
+    const display = document.getElementById("weather-display");
+    const updated = document.getElementById("weather-updated");
+    const tpl = document.getElementById("weather-template");
+    if (!display || !tpl) return;
+
+    const tz = "Asia/Taipei";
+    const WMO = {
+      0: { label: "晴朗無雲", icon: "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M5.6 18.4 4.2 19.8M19.8 4.2l-1.4 1.4M12 7a5 5 0 100 10 5 5 0 000-10z", category: "sunny" },
+      1: { label: "大致晴朗", icon: "M12 3v1M12 20v1M3 12h1M20 12h1M5.6 5.6l.7.7M17.7 17.7l.7.7M5.6 18.4l.7-.7M17.7 6.3l.7-.7M8 12a4 4 0 118 0 4 4 0 01-8 0z", category: "sunny" },
+      2: { label: "局部多雲", icon: "M7 18a4 4 0 010-8 5 5 0 019.6-1.5A4 4 0 0117 18H7z", category: "cloudy" },
+      3: { label: "陰天", icon: "M7 18a4 4 0 010-8 5 5 0 019.6-1.5A4 4 0 0117 18H7z", category: "cloudy" },
+      45: { label: "有霧", icon: "M3 8h18M3 12h18M3 16h18M7 4l1 4M17 4l-1 4", category: "fog" },
+      48: { label: "霧淞", icon: "M3 8h18M3 12h18M3 16h18M7 4l1 4M17 4l-1 4", category: "fog" },
+      51: { label: "毛毛雨（輕）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM9 18l-1 3M15 18l1 3", category: "rain" },
+      53: { label: "毛毛雨（中）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM9 18l-1 3M15 18l1 3", category: "rain" },
+      55: { label: "毛毛雨（強）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM9 18l-1 3M15 18l1 3", category: "rain" },
+      56: { label: "凍毛毛雨（輕）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM9 18l-1 3M15 18l1 3", category: "rain" },
+      57: { label: "凍毛毛雨（強）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM9 18l-1 3M15 18l1 3", category: "rain" },
+      61: { label: "小雨", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM8 17l-1 4M12 17v4M16 17l1 4", category: "rain" },
+      63: { label: "中雨", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM7 17l-1 4M11 17v4M15 17l1 4M19 17l-1 4", category: "rain" },
+      65: { label: "大雨", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM6 17l-1 4M10 17v4M14 17l1 4M18 17l-1 4", category: "rain" },
+      66: { label: "凍雨（輕）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM8 17l-1 4M12 17v4M16 17l1 4", category: "rain" },
+      67: { label: "凍雨（強）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM8 17l-1 4M12 17v4M16 17l1 4", category: "rain" },
+      71: { label: "小雪", icon: "M12 3v18M5 7l14 10M5 17l14-10M4 12h16", category: "snow" },
+      73: { label: "中雪", icon: "M12 3v18M5 7l14 10M5 17l14-10M4 12h16", category: "snow" },
+      75: { label: "大雪", icon: "M12 3v18M5 7l14 10M5 17l14-10M4 12h16", category: "snow" },
+      77: { label: "雪粒", icon: "M12 3v18M5 7l14 10M5 17l14-10M4 12h16", category: "snow" },
+      80: { label: "陣雨（輕）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM7 16l-1 5M11 16v5M15 16l1 5", category: "rain" },
+      81: { label: "陣雨（中）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM6 16l-1 5M10 16v5M14 16l1 5M18 16l-1 5", category: "rain" },
+      82: { label: "陣雨（強）", icon: "M12 3l4 7a4 4 0 11-8 0l4-7zM5 16l-1 5M9 16v5M13 16l1 5M17 16l-1 5", category: "rain" },
+      85: { label: "陣雪（輕）", icon: "M12 3v18M5 7l14 10M5 17l14-10M4 12h16", category: "snow" },
+      86: { label: "陣雪（強）", icon: "M12 3v18M5 7l14 10M5 17l14-10M4 12h16", category: "snow" },
+      95: { label: "雷雨", icon: "M13 2L4 14h6l-2 8 9-12h-6l2-8z", category: "storm" },
+      96: { label: "雷雨夾冰雹（輕）", icon: "M13 2L4 14h6l-2 8 9-12h-6l2-8z", category: "storm" },
+      99: { label: "雷雨夾冰雹（強）", icon: "M13 2L4 14h6l-2 8 9-12h-6l2-8z", category: "storm" },
+    };
+
+    // 蒲福風級 (km/h)
+    const beaufort = (kmh) => {
+      const k = kmh || 0;
+      if (k < 1) return 0;
+      if (k < 6) return 1;
+      if (k < 12) return 2;
+      if (k < 20) return 3;
+      if (k < 29) return 4;
+      if (k < 39) return 5;
+      if (k < 50) return 6;
+      if (k < 62) return 7;
+      if (k < 75) return 8;
+      if (k < 89) return 9;
+      if (k < 103) return 10;
+      return 11;
+    };
+    const beaufortLabel = (b) =>
+      ["無風", "軟風", "輕風", "微風", "和風", "清風", "強風", "疾風", "大風", "烈風", "暴風", "颶風"][b] ||
+      "—" + b;
+
+    // ===== 智慧建議生成器 =====
+    // 接收：當前 weather object + 今日 daily 物件
+    // 回傳：alerts（風險，紅色）+ clothes / play / gear 三組（每組為純文字陣列）
+    function buildAdvice(cur, today) {
+      const code = cur?.weather_code ?? 0;
+      const w = WMO[code] || WMO[2];
+      const cat = w.category;
+
+      const temp = cur?.temperature_2m ?? today?.max ?? 0;
+      const feel = cur?.apparent_temperature ?? temp;
+      const wind = cur?.wind_speed_10m ?? 0;
+      const windB = beaufort(wind);
+      const precip = cur?.precipitation ?? 0;
+      const prob = today?.precipitation_probability_max ?? 0;
+      const maxT = today?.temperature_2m_max ?? 0;
+      const minT = today?.temperature_2m_min ?? 0;
+      const uv = cur?.uv_index ?? today?.uv_index_max ?? null;
+      const hum = cur?.relative_humidity_2m ?? 0;
+      const diff = (maxT || 0) - (minT || 0);
+
+      const alerts = [];
+      const clothes = [];
+      const play = [];
+      const gear = [];
+
+      // -------- 風險提醒（紅色置頂） --------
+      if (cat === "storm") {
+        alerts.push("雷雨發生中，請勿登山、靠近金屬欄杆或空曠高點；吊橋可能管制，建議改期。");
+      }
+      if (cat === "fog") {
+        alerts.push("能見度差，山谷景觀可能完全被雲霧覆蓋；建議先確認吊橋是否開放再上山。");
+      }
+      if (windB >= 7) {
+        alerts.push("風力偏強（" + beaufortLabel(windB) + "），吊橋搖晃幅度會放大；帽子、傘具容易被吹落。");
+      }
+      if (cat === "rain" && precip >= 5) {
+        alerts.push("降雨較強，請避免走進山谷低窪處；山洪可能在雨勢稍緩後才到。");
+      }
+      if (cat === "snow") {
+        alerts.push("山區可能有積雪或結冰，階梯與吊橋可能濕滑，建議改走其他室內或平地景點。");
+      }
+
+      // -------- 出行穿搭 --------
+      if (maxT >= 32) {
+        clothes.push("白天氣溫偏高，建議穿淺色、薄長袖或透氣衣物，避免深色吸熱。");
+      } else if (maxT <= 12) {
+        clothes.push("氣溫偏低，建議攜帶厚外套、圍巾與保暖配件。");
+      } else if (feel <= 14) {
+        clothes.push("體感偏涼，建議加上薄外套，避免只穿短袖。");
+      } else if (cat === "sunny" && maxT >= 26) {
+        clothes.push("陽光充足但氣溫舒適，可穿短袖出發，再帶一件薄外套備用。");
+      }
+
+      if (diff >= 8) {
+        clothes.push("日夜溫差 " + Math.round(diff) + "°C 偏大，洋蔥式穿法（短袖 + 薄外套）比較保險。");
+      }
+
+      if (cat === "rain" || cat === "storm") {
+        clothes.push("穿防水或快乾衣物；橋面階梯濕滑，建議穿抓地力好的鞋。");
+      } else if (cat === "snow") {
+        clothes.push("穿防水鞋或加防滑鞋墊，避免在雪地、結冰面滑倒。");
+      }
+
+      if (hum >= 80 && maxT >= 28) {
+        clothes.push("濕熱明顯，建議穿排汗衣物，避免棉質容易悶住。");
+      }
+
+      // -------- 遊玩安排 --------
+      if (cat === "storm") {
+        play.push("不建議上山走吊橋，優先安排周邊平地或室內景點。");
+      } else if (cat === "rain") {
+        play.push("雨勢期間戶外體驗打折，可改以室內甜點、主題園區或在車上遊覽為主。");
+      } else if (cat === "fog") {
+        play.push("山頂雲霧機率高，拍照與遠景效果打折；建議改走平地或順遊其他景點。");
+      } else if (cat === "snow") {
+        play.push("雪況下山區管制風險較高，建議改期或改去平地景點。");
+      } else if (cat === "sunny" && (maxT >= 32 || (uv !== null && uv >= 7))) {
+        play.push("紫外線與氣溫都偏高，建議清晨或黃昏上山；正午避開吊橋長時間曝曬。");
+      } else if (cat === "sunny") {
+        play.push("天氣晴朗，適合賞景與拍照；下午到黃昏山谷的光線層次最豐富。");
+      } else if (cat === "cloudy") {
+        play.push("光線柔和、不刺眼，長時間步行較舒服，是拍照的好光線。");
+      }
+
+      if (prob >= 60 && cat !== "storm") {
+        play.push("降雨機率超過 6 成，可考慮把吊橋行程往前挪，或先查看雨勢再上山。");
+      }
+      if (prob >= 30 && prob < 60 && cat !== "rain") {
+        play.push("降雨機率中等，準備雨具但不影響整體行程；午後出發通常較穩定。");
+      }
+
+      if (windB >= 5) {
+        play.push("吊橋在風大時晃動會放大，若同行者有懼高或長輩可改走外圍觀景動線。");
+      }
+
+      // -------- 隨身物品 --------
+      if (cat === "rain" || prob >= 60) {
+        gear.push("雨傘或輕便雨衣（風大時不建議長柄傘）。");
+      } else if (cat === "storm") {
+        gear.push("防水背包或塑膠袋保護手機、證件與相機。");
+      }
+
+      if (cat === "sunny" && (maxT >= 30 || (uv !== null && uv >= 5))) {
+        gear.push("防曬乳、帽子、太陽眼鏡。");
+      }
+
+      if (maxT >= 30) {
+        gear.push("充足飲水（建議 1 – 1.5L / 人），與電解質補給。");
+      }
+
+      if (maxT >= 28 && hum >= 75) {
+        gear.push("小毛巾或汗巾，橋面無遮蔭處會比較悶熱。");
+      }
+
+      if (minT < 14) {
+        gear.push("薄外套或防風外套，黃昏過後體感會明顯下降。");
+      }
+
+      if (cat === "fog") {
+        gear.push("口罩或薄圍巾，晨間濕冷可擋風。");
+      }
+
+      if (cat === "snow" || (cat === "rain" && prob >= 60)) {
+        gear.push("備用襪子或拖鞋，雨後鞋濕會讓步行不舒服。");
+      }
+
+      if (cat === "rain" || cat === "storm" || windB >= 5) {
+        gear.push("行動電源與證件防水袋，山區訊號較弱且步道濕滑。");
+      }
+
+      return {
+        alerts,
+        clothes,
+        play,
+        gear,
+        wmoLabel: w.label,
+        windLabel: beaufortLabel(windB) + "（約 " + windB + " 級）",
+      };
+    }
+
+    const fmtTime = (iso) => {
+      try {
+        const d = new Date(iso);
+        return d.toLocaleTimeString("zh-TW", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: tz,
+          hour12: false,
+        });
+      } catch (e) {
+        return "--:--";
+      }
+    };
+
+    const fmtDay = (iso, idx) => {
+      if (idx === 0) return "今日";
+      try {
+        const d = new Date(iso);
+        const w = ["週日", "週一", "週二", "週三", "週四", "週五", "週六"];
+        const m = d.getMonth() + 1;
+        const day = d.getDate();
+        return `${m}/${day} ${w[d.getDay()]}`;
+      } catch (e) {
+        return "—";
+      }
+    };
+
+    function fillAdviceList(ul, items, icon) {
+      items.forEach((text) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span class="advice-icon" aria-hidden="true">${icon}</span>
+          <span class="advice-text"></span>
+        `;
+        li.querySelector(".advice-text").textContent = text;
+        ul.appendChild(li);
+      });
+    }
+
+    function render(payload) {
+      const node = tpl.content.cloneNode(true);
+      const c = payload.current || {};
+      const d = payload.daily || {};
+      const wmo = WMO[c.weather_code] || WMO[2];
+
+      node.querySelector("[data-weather-icon]").setAttribute("d", wmo.icon);
+      node.querySelector("[data-weather-temp]").textContent =
+        Math.round(c.temperature_2m ?? 0);
+      node.querySelector("[data-weather-desc]").textContent = wmo.label;
+      node.querySelector("[data-weather-feel]").textContent =
+        Math.round(c.apparent_temperature ?? c.temperature_2m ?? 0);
+      node.querySelector("[data-weather-humidity]").textContent =
+        Math.round(c.relative_humidity_2m ?? 0);
+      node.querySelector("[data-weather-wind]").textContent = Math.round(
+        c.wind_speed_10m ?? 0,
+      );
+      node.querySelector("[data-weather-precip]").textContent = (
+        c.precipitation ?? 0
+      ).toFixed(1);
+
+      // 智慧建議
+      const today = {
+        precipitation_probability_max: d.precipitation_probability_max?.[0] ?? 0,
+        temperature_2m_max: d.temperature_2m_max?.[0] ?? 0,
+        temperature_2m_min: d.temperature_2m_min?.[0] ?? 0,
+        uv_index_max: d.uv_index_max?.[0] ?? null,
+      };
+      const advice = buildAdvice(c, today);
+
+      // 風險提醒（紅色置頂）
+      const alertsEl = node.querySelector("[data-alerts]");
+      if (advice.alerts.length > 0) {
+        alertsEl.hidden = false;
+        alertsEl.innerHTML = `
+          <span class="weather-alerts-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path>
+            </svg>
+          </span>
+          <ul class="weather-alerts-list">
+            ${advice.alerts
+              .map((a) => `<li>${a}</li>`)
+              .join("")}
+          </ul>
+        `;
+      }
+
+      // 三大類建議（動態渲染：沒有內容就不顯示區塊）
+      const blockClothes = node.querySelector("[data-advice-clothes]");
+      const blockPlay = node.querySelector("[data-advice-play]");
+      const blockGear = node.querySelector("[data-advice-gear]");
+      if (advice.clothes.length > 0) {
+        blockClothes.hidden = false;
+        fillAdviceList(
+          node.querySelector("[data-advice-clothes-list]"),
+          advice.clothes,
+          "👕",
+        );
+      }
+      if (advice.play.length > 0) {
+        blockPlay.hidden = false;
+        fillAdviceList(
+          node.querySelector("[data-advice-play-list]"),
+          advice.play,
+          "🗺️",
+        );
+      }
+      if (advice.gear.length > 0) {
+        blockGear.hidden = false;
+        fillAdviceList(
+          node.querySelector("[data-advice-gear-list]"),
+          advice.gear,
+          "🎒",
+        );
+      }
+
+      // 七日預報
+      const list = node.querySelector("[data-forecast-list]");
+      const days = (d.time || []).length;
+      for (let i = 0; i < days; i++) {
+        const code = d.weather_code?.[i] ?? 0;
+        const w = WMO[code] || WMO[2];
+        const max = Math.round(d.temperature_2m_max?.[i] ?? 0);
+        const min = Math.round(d.temperature_2m_min?.[i] ?? 0);
+        const prob = d.precipitation_probability_max?.[i] ?? 0;
+        const sunrise = (d.sunrise?.[i] || "").split("T")[1] || "--:--";
+        const sunset = (d.sunset?.[i] || "").split("T")[1] || "--:--";
+
+        const li = document.createElement("li");
+        li.className = "weather-forecast-item";
+        li.innerHTML = `
+          <div class="weather-forecast-row">
+            <span class="weather-forecast-day">${fmtDay(d.time[i], i)}</span>
+            <span class="weather-forecast-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="${w.icon}"></path>
+              </svg>
+            </span>
+            <span class="weather-forecast-desc">${w.label}</span>
+          </div>
+          <div class="weather-forecast-meta">
+            <span class="weather-forecast-temp">
+              <strong>${max}°</strong>
+              <span>/ ${min}°</span>
+            </span>
+            <span class="weather-forecast-rain" data-prob="${prob}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3l4 7a4 4 0 11-8 0l4-7z"></path>
+              </svg>
+              降雨 ${prob}%
+            </span>
+            <span class="weather-forecast-sun">
+              <span aria-label="日出">↑ ${sunrise}</span>
+              <span aria-label="日落">↓ ${sunset}</span>
+            </span>
+          </div>
+        `;
+        list.appendChild(li);
+      }
+
+      display.replaceChildren(node);
+      if (updated && payload._meta?.syncedAt) {
+        const time = fmtTime(payload._meta.syncedAt);
+        updated.textContent = `最後更新：${time}（{SITE} 伺服器同步）`.replace("{SITE}", shortName);
+      }
+    }
+
+    async function load() {
+      try {
+        const r = await fetch("/api/weather", { headers: { Accept: "application/json" } });
+        if (!r.ok) throw new Error("weather fetch failed: " + r.status);
+        const data = await r.json();
+        render(data);
+      } catch (err) {
+        display.innerHTML = `
+          <div class="weather-error">
+            <p>天氣資料暫時無法取得。</p>
+            <p>可改由 Google 地圖查看當地近期旅客分享，或稍候再試。</p>
+          </div>
+        `;
+        if (updated) updated.textContent = "最後更新：—";
+      }
+    }
+
+    load();
+  })();
+</script>

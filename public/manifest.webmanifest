@@ -1,0 +1,35 @@
+{
+  "name": "Houtanjing 猴探井天空之橋",
+  "short_name": "Houtanjing",
+  "description": "猴探井天空之橋旅遊指南，整合 Google 地圖、交通、停車、139 縣道順遊與夕陽拍照建議。",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "zh-Hant-TW",
+  "dir": "ltr",
+  "background_color": "#f7f3ea",
+  "theme_color": "#193a32",
+  "categories": ["travel", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

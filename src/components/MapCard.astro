@@ -1,5 +1,5 @@
 ---
-import { mapLinks, place } from "../data/site";
+import { mapLinks, place, reviews } from "../data/site";
 ---
 
 <section class="map-card" aria-labelledby="map-heading">
@@ -8,6 +8,7 @@ import { mapLinks, place } from "../data/site";
     <h2 id="map-heading">位置與導航，<br />一按就出發</h2>
     <p>出發前可同時查看目前營業狀態、即時道路與近期旅客資訊。</p>
     <address>{place.address}</address>
+
     <div class="map-actions">
       <a class="btn btn-dark" href={mapLinks.search} target="_blank" rel="noopener noreferrer">
         在 Google 地圖開啟
@@ -15,13 +16,20 @@ import { mapLinks, place } from "../data/site";
       <a class="btn btn-outline" href={mapLinks.directions} target="_blank" rel="noopener noreferrer">
         開始導航
       </a>
+      <a class="btn btn-outline" href={mapLinks.reviews} target="_blank" rel="noopener noreferrer">
+        在 Google 地圖查看全部評價
+      </a>
     </div>
+
+    <p class="map-source">
+      評分（{reviews.rating.toFixed(1)} / 5 · {reviews.count.toLocaleString("zh-TW")} 則）同步自 Google 地圖（Google Maps）用戶評價 · {reviews.syncedAtLabel} · 點擊查看 Google 地圖全部評價↗
+    </p>
   </div>
   <div class="map-stage">
     <iframe
       class="map-embed"
       src={mapLinks.embed}
-      title="猴探井天空之橋 Google 地圖"
+      title={`${place.name} ${place.city} Google 地圖`}
       width="600"
       height="450"
       style="border:0;"

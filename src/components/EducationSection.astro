@@ -1,0 +1,56 @@
+---
+import { RESPONSIBILITY, MYTHS } from "../data/knowledge";
+---
+
+<section class="education" aria-labelledby="education-heading">
+  <div class="container">
+    <div class="education-head">
+      <p class="eyebrow">科普與訪客責任</p>
+      <h2 id="education-heading">
+        走得遠之前，<br />先把這幾件事放在心裡
+      </h2>
+      <p>
+        作為非營利科普網站，我們相信一座好的景點，是訪客與環境共同守護出來的。下列原則整理自無痕山林、淺山保育與在地文化尊重的常見指引，僅供參考。
+      </p>
+    </div>
+
+    <div class="education-grid">
+      <section class="education-responsibility">
+        <h3>訪客責任清單</h3>
+        <ol class="education-list">
+          {
+            RESPONSIBILITY.map((item) => (
+              <li>
+                <span class="education-tag">{item.tag}</span>
+                <div>
+                  <strong>{item.title}</strong>
+                  <p>{item.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <section class="education-myths">
+        <h3>常見誤解</h3>
+        <ul>
+          {
+            MYTHS.map((item) => (
+              <li>
+                <p class="education-myth">
+                  <span aria-hidden="true">誤</span>
+                  <span>{item.myth}</span>
+                </p>
+                <p class="education-truth">
+                  <span aria-hidden="true">正</span>
+                  <span>{item.truth}</span>
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </div>
+</section>

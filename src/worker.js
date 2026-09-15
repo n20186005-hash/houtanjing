@@ -2,7 +2,8 @@
 //
 // 由 Cloudflare Pages 迁移而来，统一接管：
 //   (a) 重定向逻辑（原 public/_redirects：www -> apex、旧路径 301）
-//   (b) API / 动态逻辑（原 functions/ 的 Pages Functions，本站点无，预留接口）
+//   (b) API / 动态逻辑（原 functions/ 的 Pages Functions）
+//       - /api/weather：Server-Side 气象资料聚合，统一本站对用户的天气资料接口
 //   (c) 静态资源服务（env.ASSETS.fetch）
 //   (d) 响应头注入（安全头 + /_astro/ 长缓存，原 public/_headers）
 //
@@ -19,6 +20,119 @@ const REDIRECTS = new Map([
   ["/directions", "/transport"],
   ["/tickets", "/hours-and-tickets"],
 ]);
+
+// ─────────────────────────────────────────────────────────────
+// 气象资料聚合：/api/weather
+//
+// 设计目标：
+//   1. 资料在 Cloudflare 边缘网络取得，不让浏览器直接调用外部天气接口，
+//      避免在用户端泄露任何与 API 来源、密钥、计费相关字样。
+//   2. 同一份资料在边缘节点缓存 30 分钟，减少对上游的请求压力。
+//   3. 输出 schema 与上游保持一致（current + daily 数组），
+//      由前端 WeatherCard 自行映射成中文标签与图标。
+// ─────────────────────────────────────────────────────────────
+const PLACE_COORD = { latitude: 23.908447976036896, longitude: 120.6315990909934 };
+
+function buildUpstreamUrl({ latitude, longitude, lang }) {
+  const params = new URLSearchParams({
+    latitude: String(latitude),
+    longitude: String(longitude),
+    current:
+      "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m",
+    daily:
+      "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,sunrise,sunset,uv_index_max",
+    timezone: "Asia/Taipei",
+    forecast_days: "7",
+  });
+  if (lang) params.set("language", lang);
+  return `https://api.open-meteo.com/v1/forecast?${params.toString()}`;
+}
+
+async function handleWeatherApi(request, ctx) {
+  const requestUrl = new URL(request.url);
+  const latitude = requestUrl.searchParams.get("lat")
+    ? Number(requestUrl.searchParams.get("lat"))
+    : PLACE_COORD.latitude;
+  const longitude = requestUrl.searchParams.get("lon")
+    ? Number(requestUrl.searchParams.get("lon"))
+    : PLACE_COORD.longitude;
+  const lang = requestUrl.searchParams.get("lang") ?? "zh";
+
+  const upstreamUrl = buildUpstreamUrl({ latitude, longitude, lang });
+  const cacheKey = new Request(
+    `https://weather.internal.houtanjing.com/v1?${new URLSearchParams({
+      lat: String(latitude),
+      lon: String(longitude),
+      lang,
+    }).toString()}`,
+    { method: "GET" },
+  );
+
+  const cache = caches.default;
+  let cached = await cache.match(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const upstream = await fetch(upstreamUrl, {
+      headers: { Accept: "application/json" },
+    });
+    if (!upstream.ok) {
+      return new Response(
+        JSON.stringify({ error: "weather upstream unavailable" }),
+        {
+          status: 502,
+          headers: {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+          },
+        },
+      );
+    }
+
+    const data = await upstream.json();
+    // 附加本站同步时间，便于前端显示「最后更新时间」
+    const payload = {
+      ...data,
+      _meta: {
+        syncedAt: new Date().toISOString(),
+        location: {
+          latitude: Number(latitude.toFixed(4)),
+          longitude: Number(longitude.toFixed(4)),
+        },
+      },
+    };
+
+    const response = new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+        "cache-control": "public, max-age=1800, s-maxage=1800",
+        "access-control-allow-origin": "*",
+        "access-control-allow-methods": "GET, OPTIONS",
+        "access-control-max-age": "600",
+      },
+    });
+
+    // 边缘节点缓存 30 分钟
+    if (ctx?.waitUntil) {
+      ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    } else {
+      await cache.put(cacheKey, response.clone());
+    }
+    return response;
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: "weather fetch failed", detail: String(err) }),
+      {
+        status: 502,
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+          "cache-control": "no-store",
+        },
+      },
+    );
+  }
+}
 
 function redirect(status, location) {
   return new Response(null, {
@@ -72,6 +186,18 @@ function buildResponse(response, url, statusOverride) {
   });
 }
 
+function corsPreflight() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "access-control-allow-origin": "*",
+      "access-control-allow-methods": "GET, OPTIONS",
+      "access-control-allow-headers": "content-type",
+      "access-control-max-age": "600",
+    },
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -90,12 +216,18 @@ export default {
     }
 
     // (b) API / 动态逻辑 —— 匹配原 functions/ 路由
-    // 本站点无 Pages Functions；如需新增服务端接口，在此处匹配：
-    // if (url.pathname === "/api/example") {
-    //   return new Response(JSON.stringify({ ok: true }), {
-    //     headers: { "content-type": "application/json" },
-    //   });
-    // }
+    // CORS preflight
+    if (
+      request.method === "OPTIONS" &&
+      url.pathname.startsWith("/api/")
+    ) {
+      return corsPreflight();
+    }
+
+    // /api/weather：Server-Side 气象资料聚合
+    if (url.pathname === "/api/weather") {
+      return handleWeatherApi(request, ctx);
+    }
 
     // (c) 静态资源服务
     const response = await env.ASSETS.fetch(request);

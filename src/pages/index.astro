@@ -1,8 +1,19 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import MapCard from "../components/MapCard.astro";
-import { mapLinks, site } from "../data/site";
+import Reviews from "../components/Reviews.astro";
+import Sources from "../components/Sources.astro";
+import WeatherCard from "../components/WeatherCard.astro";
+import SeasonalStrategy from "../components/SeasonalStrategy.astro";
+import HistorySection from "../components/HistorySection.astro";
+import CustomizedRoutes from "../components/CustomizedRoutes.astro";
+import GenericRoutes from "../components/GenericRoutes.astro";
+import FacilitySection from "../components/FacilitySection.astro";
+import VisitorServices from "../components/VisitorServices.astro";
+import EducationSection from "../components/EducationSection.astro";
+import { mapLinks, place, site } from "../data/site";
 
+// 首頁 FAQ（前台可見；同步餵給 BaseLayout 的 FAQPage JSON-LD）
 const faqItems = [
   {
     question: "猴探井天空之橋值得專程來嗎？",
@@ -35,19 +46,29 @@ const faqItems = [
       "周邊不同停車空間的營業與收費方式可能不同，請以現場標示為準，不要直接沿用舊遊記資訊。",
   },
 ];
+
+// 實體綁定 SEO 內容（單一景點模板）
+const fullName = place.name;
+const shortName = place.shortName;
+const cityName = place.city;
+const stateName = place.state;
+const countryName = place.countryName;
+const landmark1 = place.nearbyLandmarks.landmark1;
+const landmark2 = place.nearbyLandmarks.landmark2;
 ---
 
 <BaseLayout
   title="猴探井天空之橋｜交通、停車、Google 地圖與順遊攻略"
   description={site.description}
   breadcrumbs={[{ name: "首頁", url: "/" }]}
+  faqs={faqItems}
 >
   <section class="home-hero" aria-labelledby="hero-title">
     <img
       src="/images/houtanjing-bridge.jpg"
       width="1025"
       height="768"
-      alt="夕陽映照下的猴探井天空之橋橫跨八卦山谷"
+      alt={`${fullName}（${cityName}）橫跨八卦山谷 — ${shortName} 全景`}
       loading="eager"
       fetchpriority="high"
     />
@@ -55,11 +76,11 @@ const faqItems = [
       <div class="hero-copy">
         <div class="hero-kicker">南投・八卦山 139 縣道</div>
         <h1 id="hero-title">
-          猴探井
+          {shortName}
           <span>天空之橋・微笑天梯</span>
         </h1>
         <p>
-          走過橫跨八卦山谷的微笑天梯，遠眺彰化平原與夕陽風景。交通、停車、階梯難度與順遊路線，出發前一次看懂。
+          走過橫跨八卦山谷的微笑天梯，遠眺彰化平原與夕陽風景。交通、停車、階梯難度、即時天氣與順遊路線，出發前一次看懂。
         </p>
         <div class="hero-actions">
           <a
@@ -74,6 +95,9 @@ const faqItems = [
             </svg>
           </a>
           <a class="btn btn-light" href="/visit">查看遊玩指南</a>
+          <a class="btn btn-light" href={mapLinks.reviews} target="_blank" rel="noopener noreferrer">
+            在 Google 地圖查看全部評價
+          </a>
         </div>
       </div>
     </div>
@@ -81,7 +105,7 @@ const faqItems = [
       <div class="container hero-facts">
         <div class="hero-fact">
           <span>LOCATION</span>
-          <strong>南投市・八卦山區</strong>
+          <strong>{stateName}・{cityName}</strong>
         </div>
         <div class="hero-fact">
           <span>EXPERIENCE</span>
@@ -99,6 +123,35 @@ const faqItems = [
     </div>
   </section>
 
+  <!-- 實體綁定 SEO 區塊：等位聲明 + 地理麵包屑 + 周邊語意集群 -->
+  <section class="section entity-binding" aria-labelledby="entity-heading">
+    <div class="container">
+      <p class="eyebrow">景點介紹</p>
+      <h2 id="entity-heading">
+        關於 <strong>{fullName}</strong>（{cityName}）
+      </h2>
+      <p class="entity-lead">
+        歡迎來到 <strong>{fullName}</strong>，廣為人知的<strong>{shortName}</strong>。坐落於
+        <strong>{stateName}</strong> <strong>{cityName}</strong>，位於 <strong>{countryName}</strong> 八卦山風景區的核心地帶，
+        是規劃南投半日遊與 139 縣道順遊的主要停靠點。
+      </p>
+      <p class="entity-breadcrumb" aria-label="地理層級">
+        <span>{fullName}</span>
+        <span class="entity-sep" aria-hidden="true">→</span>
+        <span>{cityName}</span>
+        <span class="entity-sep" aria-hidden="true">→</span>
+        <span>{stateName}</span>
+        <span class="entity-sep" aria-hidden="true">→</span>
+        <span>{countryName}</span>
+      </p>
+      <p class="entity-nearby">
+        造訪 <strong>{fullName}</strong> 時，可順道走訪周邊景點與地標，包含
+        <a href="/nearby"><strong>{landmark1}</strong></a> 與
+        <a href="/nearby"><strong>{landmark2}</strong></a>。
+      </p>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
       <div class="intro-grid">
@@ -111,7 +164,8 @@ const faqItems = [
         </div>
         <div class="intro-copy">
           <p>
-            猴探井天空之橋連接八卦山谷兩側，走上橋面，視線從近處的林梢一路延伸到彰化平原。它不是需要整天征服的景點，而是很適合放進南投午後的一段風景。
+            {fullName}（{shortName}）連接八卦山谷兩側，走上橋面，視線從近處的林梢一路延伸到彰化平原。
+            它不是需要整天征服的景點，而是很適合放進南投午後的一段風景。
           </p>
           <a class="text-link" href="/guides/is-it-worth-visiting">
             這裡適合我嗎？
@@ -135,6 +189,13 @@ const faqItems = [
           <span>兩端高低落差約 5.65 公尺</span>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- NEW：即時天氣 + 未來 7 日（Server-Side 抓取，Worker 內快取） -->
+  <section class="section">
+    <div class="container">
+      <WeatherCard />
     </div>
   </section>
 
@@ -181,12 +242,15 @@ const faqItems = [
         <article class="planner-card">
           <span class="planner-index">06</span>
           <h3>更適合搭配周邊順遊</h3>
-          <p>微熱山丘、中興新村與 139 縣道，能串成舒服的半日行程。</p>
+          <p>{landmark1}、{landmark2} 與 139 縣道，能串成舒服的半日行程。</p>
           <a href="/nearby"><span>查看附近景點</span></a>
         </article>
       </div>
     </div>
   </section>
+
+  <!-- NEW：季度遊覽策略表 -->
+  <SeasonalStrategy />
 
   <section class="section story-section">
     <div class="story-grid">
@@ -195,11 +259,11 @@ const faqItems = [
           src="/images/houtanjing-sunset.jpg"
           width="1189"
           height="768"
-          alt="猴探井山谷、天空之橋與西向夕陽全景"
+          alt={`${fullName}（${cityName}）山谷與西向夕陽全景`}
           loading="lazy"
         />
         <figcaption class="image-caption">
-          景觀影像：交通部觀光署參山國家風景區管理處
+          景觀影像：交通部觀光署參山國家風景區管理處（本圖片版權歸原攝影者所有）
         </figcaption>
       </figure>
       <div class="story-copy">
@@ -246,7 +310,7 @@ const faqItems = [
         <div class="suit-column">
           <h3>這樣安排，會很適合</h3>
           <ul class="check-list">
-            <li>已經安排微熱山丘或 139 縣道</li>
+            <li>已經安排 {landmark1} 或 139 縣道</li>
             <li>想拍吊橋、山谷與夕陽</li>
             <li>喜歡短程散步，不追求大型設施</li>
             <li>平日前往，希望走得更從容</li>
@@ -278,7 +342,7 @@ const faqItems = [
         <a class="route-card" href="/routes/route-139">
           <span>SCENIC DRIVE</span>
           <h3>139 縣道<br />山稜自駕</h3>
-          <p>微熱山丘 → 山稜觀景 → 猴探井 → 南投市區</p>
+          <p>{landmark1} → 山稜觀景 → {shortName} → {cityName}區</p>
           <strong>查看路線 <span aria-hidden="true">→</span></strong>
         </a>
         <a class="route-card" href="/routes/half-day-trip">
@@ -290,18 +354,40 @@ const faqItems = [
         <a class="route-card" href="/routes/family-trip">
           <span>EASY FAMILY</span>
           <h3>親子長輩<br />彈性輕鬆版</h3>
-          <p>中興新村 → 午餐 → 外圍觀景 → 視情況過橋</p>
+          <p>{landmark2} → 午餐 → 外圍觀景 → 視情況過橋</p>
           <strong>查看路線 <span aria-hidden="true">→</span></strong>
         </a>
       </div>
     </div>
   </section>
 
+  <!-- NEW：按人群定制的遊覽方案（親子 / 攝影 / 無障礙） -->
+  <CustomizedRoutes />
+
+  <!-- NEW：通用遊覽路線（半日 / 全日） -->
+  <GenericRoutes />
+
+  <!-- NEW：歷史 / 地質 / 故事 / 生態 / 文化 -->
+  <HistorySection />
+
   <section class="section">
     <div class="container">
       <MapCard />
     </div>
   </section>
+
+  <!-- 評價區塊：Google 地圖評價同步（不寫入 JSON-LD） -->
+  <section class="section">
+    <div class="container">
+      <Reviews />
+    </div>
+  </section>
+
+  <!-- NEW：周邊設施中立類型概述 -->
+  <FacilitySection />
+
+  <!-- NEW：訪客服務 -->
+  <VisitorServices />
 
   <section class="section-tight" aria-labelledby="faq-title">
     <div class="narrow">
@@ -324,4 +410,10 @@ const faqItems = [
       </p>
     </div>
   </section>
+
+  <!-- NEW：科普與訪客責任 -->
+  <EducationSection />
+
+  <!-- 資料來源區塊：圖片版權 + 評價來源 + 官方觀光 -->
+  <Sources />
 </BaseLayout>
