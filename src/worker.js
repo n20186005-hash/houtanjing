@@ -209,6 +209,13 @@ export default {
       return redirect(301, url.toString());
     }
 
+    // 强制 HTTP -> HTTPS：避免 GSC 同时索引 http 与 https 版本造成重复内容。
+    // Cloudflare 边缘通常会做协议升级，但在自定义域名前缀或 SSL 模式下仍需要保险写法。
+    if (url.protocol === "http:") {
+      url.protocol = "https:";
+      return redirect(301, url.toString());
+    }
+
     // 自定义站内 301 重定向
     const target = REDIRECTS.get(url.pathname);
     if (target) {

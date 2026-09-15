@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import FaqList from "../components/FaqList.astro";
 import { pages, pageBySlug, type ContentPage } from "../data/content";
 import { mapLinks, place } from "../data/site";
 
@@ -93,13 +94,8 @@ const breadcrumbs = [
             <section class="content-section" aria-labelledby="faq-page-title">
               <p class="eyebrow">FAQ</p>
               <h2 id="faq-page-title">最常被問的行前問題</h2>
-              <div class="faq-list" style="margin-top: 24px;">
-                {page.faqs.map((item) => (
-                  <details>
-                    <summary>{item.question}</summary>
-                    <p>{item.answer}</p>
-                  </details>
-                ))}
+              <div style="margin-top: 24px;">
+                <FaqList items={page.faqs} />
               </div>
             </section>
           )
@@ -147,7 +143,18 @@ const breadcrumbs = [
           )
         }
 
-        {page.callout && <aside class="callout">{page.callout}</aside>}
+        {page.callout && (
+          <aside class="callout">
+            <p>{page.callout}</p>
+            {page.slug === "history" && (
+              <div class="callout-cta">
+                <a class="btn btn-dark" href="/visit">查看 2026 門票與開放時間</a>
+                <a class="btn btn-outline" href="/nearby">139 縣道周邊景點</a>
+                <a class="btn btn-outline" href="/sunset">夕陽谷拍攝建議</a>
+              </div>
+            )}
+          </aside>
+        )}
       </div>
 
       <aside class="article-aside" aria-label="本頁內容">

@@ -1,0 +1,49 @@
+---
+// FaqList.astro — 共用 FAQ 區塊
+//
+// 同時輸出兩種結構化資料標記（雙重標記策略）：
+//   1. <head> 中的 FAQPage JSON-LD（由 BaseLayout 注入） — 主富結果來源
+//   2. 本文內的 Schema.org microdata — 補強 Google 對實際可見 FAQ 區塊的識別
+//
+// 兩者內容完全一致，避免 Google 對「隱藏 FAQ」產生警示。
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FaqItem[];
+  /** 是否在每個項目加上 itemprop 等 microdata 屬性（FAQPage 雙重標記） */
+  microdata?: boolean;
+}
+
+const { items, microdata = true } = Astro.props;
+---
+
+<div
+  class="faq-list"
+  itemtype={microdata ? "https://schema.org/FAQPage" : undefined}
+  itemscope={microdata ? true : undefined}
+>
+  {
+    items.map((item) => (
+      <details
+        itemtype={microdata ? "https://schema.org/Question" : undefined}
+        itemprop={microdata ? "mainEntity" : undefined}
+        itemscope={microdata ? true : undefined}
+      >
+        <summary>
+          <span itemprop="name">{item.question}</span>
+        </summary>
+        <div
+          itemtype={microdata ? "https://schema.org/Answer" : undefined}
+          itemprop={microdata ? "acceptedAnswer" : undefined}
+          itemscope={microdata ? true : undefined}
+        >
+          <p itemprop="text">{item.answer}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
