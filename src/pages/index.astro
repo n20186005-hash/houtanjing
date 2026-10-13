@@ -69,8 +69,8 @@ const landmark2 = place.nearbyLandmarks.landmark2;
 ---
 
 <BaseLayout
-  title="猴探井天空之橋｜2026 門票 70 元、開放時間 08:30-18:00 與 139 縣道順遊攻略"
-  description="猴探井天空之橋 2026 最新門票全票 70 元、開放時間 08:30-18:00、204 公尺微笑天梯與 265 階攻略。整合交通、停車、Google 地圖、微熱山丘、139 縣道與南投半日遊路線，出發前一次看懂。"
+  title="猴探井天空之橋攻略｜門票70元、營業時間、交通停車與附近景點"
+  description="猴探井天空之橋（微笑天梯）位於南投八卦山，全長 204 公尺、265 階。整理最新門票 70 元與開放資訊、停車場、交通導航、夕陽拍照及微熱山丘附近景點，出發前一次了解。"
   breadcrumbs={[{ name: "首頁", url: "/" }]}
   faqs={faqItems}
 >
@@ -147,6 +147,51 @@ const landmark2 = place.nearbyLandmarks.landmark2;
         <div class="hero-fact">
           <span>TRIP STYLE</span>
           <strong>139 縣道半日遊</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- P0：2026 參觀資訊一覽（可核對、附來源與核查月份；非永久固定） -->
+  <section class="section visit-info" aria-labelledby="visit-info-heading">
+    <div class="container">
+      <div class="visit-info-card">
+        <p class="eyebrow">出發前一次看齊</p>
+        <h2 id="visit-info-heading">2026 年猴探井天空之橋參觀資訊</h2>
+        <p class="visit-info-lead">
+          下方為整理自官方觀光資料的重點資訊；現場票價、開放與管制狀態仍可能依季節或天候調整，出發當天請以
+          <a href={mapLinks.search} target="_blank" rel="noopener noreferrer">Google 地圖現場資訊</a> 與入口公告為準。
+        </p>
+        <dl class="visit-info-table">
+          <div class="visit-info-row">
+            <dt>門票</dt>
+            <dd>全票新台幣 <strong>70 元</strong>；另設優待票與團體優惠，適用方式以現場公告為準。</dd>
+          </div>
+          <div class="visit-info-row">
+            <dt>開放時間</dt>
+            <dd>每日 <strong>08:30 – 18:00</strong>；遇強風、雷雨或維護可能暫停開放，建議先確認當日狀態。</dd>
+          </div>
+          <div class="visit-info-row">
+            <dt>地址</dt>
+            <dd>{place.address}（{place.postalCode}）</dd>
+          </div>
+          <div class="visit-info-row">
+            <dt>聯絡電話</dt>
+            <dd><a href={`tel:${place.phone.replace(/[^0-9+]/g, "")}`}>{place.phone}</a></dd>
+          </div>
+          <div class="visit-info-row">
+            <dt>雨天限制</dt>
+            <dd>降雨或強風會增加濕滑與晃動風險，可能影響吊橋開放；山區天候變化快，出發前請查看天氣與營業狀態。</dd>
+          </div>
+          <div class="visit-info-row">
+            <dt>資料核查</dt>
+            <dd>2026 年 10 月整理，來源：參山國家風景區管理處 / 南投縣政府觀光。現場仍以公告為準。</dd>
+          </div>
+        </dl>
+        <div class="visit-info-actions">
+          <a class="btn btn-primary" href="/hours-and-tickets">門票與開放時間細節</a>
+          <a class="btn btn-light" href="/transport">交通與導航</a>
+          <a class="btn btn-light" href="/parking">停車場</a>
         </div>
       </div>
     </div>

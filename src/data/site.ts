@@ -60,22 +60,22 @@ export const place = {
 
 // Google Maps 用戶評價（僅前台顯示，不寫入 JSON-LD）
 //
-// 來源：Google Maps 商家資訊（2026 年 9 月同步）。
+// 來源：Google Maps 商家資訊（2026 年 10 月同步）。
 // 依 Google 第三方評論政策，該評分與評價數僅以「同步來源」方式呈現，
 // 不偽裝為本站原創評論、不在結構化資料中以 AggregateRating 標記。
 export const reviews = {
   rating: 3.8,
-  count: 6846,
+  count: 6856,
   // 用於前台「點擊查看 Google 地圖全部評價」的外連
   // {{MAPS_SHARE_URL}}：最新 Google Maps 分享短連結
   shareUrl: "https://maps.app.goo.gl/eZ2QsudhgvX6xkzR8",
   // 同步時間（顯示於頁面，避開每分鐘變動）
-  syncedAt: "2026-09",
-  syncedAtLabel: "2026 年 9 月",
+  syncedAt: "2026-10",
+  syncedAtLabel: "2026 年 10 月",
   // 來源說明（顯示於評價區塊）
-  sourceNote: "同步自 Google 地圖用戶評價，同步時間 2026 年 9 月；版權歸原作者與 Google 地圖所有。",
+  sourceNote: "同步自 Google 地圖用戶評價，同步時間 2026 年 10 月；版權歸原作者與 Google 地圖所有。",
   // 短描述（顯示於評分下方一行小字）
-  inlineCaption: "評分與評價數同步自 Google 地圖（Google Maps）用戶評價 · 2026 年 9 月 · 點擊查看 Google 地圖全部評價↗",
+  inlineCaption: "評分與評價數同步自 Google 地圖（Google Maps）用戶評價 · 2026 年 10 月 · 點擊查看 Google 地圖全部評價↗",
 };
 
 // Google Maps 連結集中管理
