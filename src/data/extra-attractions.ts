@@ -116,3 +116,34 @@ for (const page of extraAttractions) {
     { title: "官方資料與地圖核對", body: `官方參考：${detail.source}。導覽請使用本頁專屬 Google Maps 搜尋連結，確認實際停車與入場位置。` },
   );
 }
+
+const jijiPage = extraAttractions.find((page) => page.slug === "attractions/jiji-green-tunnel");
+if (jijiPage?.map && jijiPage.profile) {
+  // 使用訪客提供的兩個 Google Maps 地點頁；兩個標記不可混成同一導航點。
+  jijiPage.map.url = "https://maps.app.goo.gl/VreDJ5HW9t2hQo1B6";
+  jijiPage.mapPoints = [
+    {
+      name: "集集綠色隧道（1）",
+      url: "https://maps.app.goo.gl/VreDJ5HW9t2hQo1B6",
+      note: "Google 地圖獨立標記（1）。適合從此定位查看該段道路周邊環境與合法停靠位置。",
+    },
+    {
+      name: "集集綠色隧道（3）",
+      url: "https://maps.app.goo.gl/zqk5UySL9grQEhLE9",
+      note: "Google 地圖獨立標記（3）。可作為沿線另一段的路線參考；先確認道路方向與交通管制。",
+    },
+  ];
+  jijiPage.sections.splice(2, 0, {
+    title: "集集綠色隧道兩處 Google 地圖定位",
+    body: "集集綠色隧道是一段較長的景觀道路，地圖中有不同位置標記。集集綠色隧道（1）https://maps.app.goo.gl/VreDJ5HW9t2hQo1B6；集集綠色隧道（3）https://maps.app.goo.gl/zqk5UySL9grQEhLE9。請依你的遊覽方向選擇定位，不把兩個點視為同一個入口。",
+    items: ["兩個標記皆對應集集綠色隧道沿線，位置可能不同。", "安排騎行或步行前先確認合法停車、公共通行路段及回程方式。", "道路與鐵路均持續運作，勿在車道或軌道中間停留拍照。"],
+  });
+  jijiPage.profile.transport.push({
+    label: "分段導航（1）／（3）",
+    text: "可分別開啟本頁下方的集集綠色隧道（1）與（3）Google 地圖標記，選擇適合的路段；兩者並非同一個停車入口。",
+  });
+  jijiPage.faqs?.push({
+    question: "集集綠色隧道（1）和（3）是同一個地點嗎？",
+    answer: "它們是 Google 地圖上兩個分開的景點標記，本站保留各自的連結供你選擇不同路段。實際道路與可停車位置請以地圖和現場交通標誌為準。",
+  });
+}

@@ -197,9 +197,20 @@ const breadcrumbs = [
             <p class="eyebrow">獨立景點導航</p>
             <h2>{page.map.name}位置與交通查詢</h2>
             <p>{page.map.address}。地圖已依本頁景點分別設定；實際交通與入口位置請以地圖與現場告示為準。</p>
+            {page.mapPoints && (
+              <div class="profile-info-grid">
+                {page.mapPoints.map((point) => (
+                  <div>
+                    <h3>{point.name}</h3>
+                    <p>{point.note}</p>
+                    <p><a class="btn btn-outline" href={point.url} target="_blank" rel="noopener noreferrer">開啟{point.name} Google 地圖 ↗</a></p>
+                  </div>
+                ))}
+              </div>
+            )}
             <div class="map-actions">
               <a class="btn btn-dark" href={page.map.url} target="_blank" rel="noopener noreferrer">查看{page.map.name}地圖 ↗</a>
-              <a class="btn btn-outline" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(page.map.name + ' ' + page.map.address)}`} target="_blank" rel="noopener noreferrer">導航至{page.map.name} ↗</a>
+              <a class="btn btn-outline" href={page.mapPoints?.[0]?.url ?? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(page.map.name + ' ' + page.map.address)}`} target="_blank" rel="noopener noreferrer">導航至{page.map.name} ↗</a>
             </div>
           </section>
         )}

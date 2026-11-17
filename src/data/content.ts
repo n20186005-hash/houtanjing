@@ -43,6 +43,7 @@ export type ContentPage = {
   imageCredit?: string;
   about?: { heading: string; text: string; source: string; sourceLabel: string };
   map?: { name: string; address: string; url: string };
+  mapPoints?: { name: string; url: string; note: string }[];
   profile?: AttractionProfile;
   facts?: { value: string; label: string }[];
   sections: ContentSection[];
