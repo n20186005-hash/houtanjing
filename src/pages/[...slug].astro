@@ -48,7 +48,8 @@ const breadcrumbs = [
           <span aria-current="page">{page.shortTitle}</span>
         </nav>
         <p class="eyebrow eyebrow-light">{page.eyebrow}</p>
-        <h1>{page.title}</h1>
+        <h1>{page.displayName ?? page.title}</h1>
+        {page.tagline && <p class="profile-tagline">{page.tagline}</p>}
         <p class="page-lead">{page.lead}</p>
         {page.profile && page.map && (
           <div class="profile-hero-meta">
@@ -78,6 +79,21 @@ const breadcrumbs = [
     </div>
   </header>
 
+  {page.about && (
+    <section class="section attraction-about" aria-labelledby="about-place-title">
+      <div class="container attraction-about-inner">
+        <div>
+          <p class="eyebrow">關於景點 · 管理與文化</p>
+          <h2 id="about-place-title">{page.about.heading}</h2>
+        </div>
+        <div>
+          <p>{page.about.text}</p>
+          <a href={page.about.source} target="_blank" rel="noopener noreferrer">管理與背景資料：{page.about.sourceLabel} ↗</a>
+        </div>
+      </div>
+    </section>
+  )}
+
   {page.profile && (
     <section class="section profile-discover">
       <div class="container profile-discover-grid">
@@ -91,21 +107,6 @@ const breadcrumbs = [
           <ul>{page.profile.tips.map((tip) => <li>{tip}</li>)}</ul>
           <h3>景區特色</h3>
           <ul>{page.profile.highlights.map((item) => <li>{item}</li>)}</ul>
-        </div>
-      </div>
-    </section>
-  )}
-
-  {page.about && (
-    <section class="section attraction-about" aria-labelledby="about-place-title">
-      <div class="container attraction-about-inner">
-        <div>
-          <p class="eyebrow">關於景點 · 管理與文化</p>
-          <h2 id="about-place-title">{page.about.heading}</h2>
-        </div>
-        <div>
-          <p>{page.about.text}</p>
-          <a href={page.about.source} target="_blank" rel="noopener noreferrer">管理與背景資料：{page.about.sourceLabel} ↗</a>
         </div>
       </div>
     </section>
@@ -181,10 +182,10 @@ const breadcrumbs = [
           <section class="content-section" id="place-navigation">
             <p class="eyebrow">獨立景點導航</p>
             <h2>{page.map.name}位置與交通查詢</h2>
-            <p>{page.map.address}。這是本頁景點的專屬 Google Maps 搜尋，而非猴探井天空之橋的共用定位；實際交通請以地圖與現場告示為準。</p>
+            <p>{page.map.address}。地圖已依本頁景點分別設定；實際交通與入口位置請以地圖與現場告示為準。</p>
             <div class="map-actions">
               <a class="btn btn-dark" href={page.map.url} target="_blank" rel="noopener noreferrer">查看{page.map.name}地圖 ↗</a>
-              <a class="btn btn-outline" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(page.map.name)}`} target="_blank" rel="noopener noreferrer">導航至{page.map.name} ↗</a>
+              <a class="btn btn-outline" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(page.map.name + ' ' + page.map.address)}`} target="_blank" rel="noopener noreferrer">導航至{page.map.name} ↗</a>
             </div>
           </section>
         )}

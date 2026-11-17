@@ -995,6 +995,7 @@ summary {
 
 .attraction-about { background: var(--stone-100, #f5f2e9); }
 .profile-hero-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 24px; font-size: .88rem; }
+.profile-tagline { margin: 18px 0 0; color: #f3b36e; font-weight: 650; font-size: clamp(.98rem, 1.5vw, 1.25rem); }
 .profile-hero-meta span { color: rgba(255,255,255,.75); }
 .profile-hero-meta a { display: inline-flex; color: white; font-weight: 700; text-underline-offset: 4px; }
 .profile-discover-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(32px, 6vw, 90px); }

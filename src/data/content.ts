@@ -31,6 +31,8 @@ export type ContentPage = {
   slug: string;
   title: string;
   shortTitle: string;
+  displayName?: string;
+  tagline?: string;
   description: string;
   eyebrow: string;
   lead: string;
@@ -727,6 +729,8 @@ export const pages: ContentPage[] = [
   },
   {
     slug: "attractions/sunny-hills",
+    displayName: "微熱山丘南投三合院",
+    tagline: "八卦山鳳梨文化與鄉村三合院・139 縣道順遊",
     title: "微熱山丘南投三合院附近景點｜猴探井天空之橋、139 縣道順遊攻略",
     shortTitle: "微熱山丘周邊順遊",
     description: "到南投微熱山丘吃鳳梨酥後還能去哪？整理猴探井天空之橋、八卦山 139 縣道、中興新村的行程順序、交通與雨天備案。",
@@ -773,6 +777,8 @@ export const pages: ContentPage[] = [
   },
   {
     slug: "attractions/zhongxing-new-village",
+    displayName: "中興新村",
+    tagline: "省府文化景觀、花園城市街廓與南投慢步調",
     title: "中興新村與猴探井天空之橋一日遊｜南投親子散步、八卦山路線",
     shortTitle: "中興新村順遊",
     description: "中興新村與猴探井天空之橋如何順遊？整理平地散步、午餐、八卦山階梯吊橋、長輩親子動線、交通與雨天安排。",
@@ -814,6 +820,8 @@ export const pages: ContentPage[] = [
   },
   {
     slug: "guides/houtanjing-name-origin",
+    displayName: "猴探井的故事",
+    tagline: "從山谷地名到微笑天梯的工程與地方記憶",
     title: "猴探井為什麼叫猴探井？地名傳說、夕陽谷與微笑天梯的故事",
     shortTitle: "猴探井名稱由來",
     description: "解答猴探井故事與名稱由來：猴群探井的地形意象、地方傳說與可考的天空之橋工程特色，分清傳說和景點事實。",
