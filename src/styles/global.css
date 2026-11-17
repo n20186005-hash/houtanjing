@@ -1909,6 +1909,7 @@ summary {
     color: white;
     text-align: center;
   }
+}
 
   /* =========================================================
      即時天氣 + 七日預報（Server-Side 抓取）
@@ -3404,6 +3405,7 @@ summary {
     }
   }
 
+@media (max-width: 900px) {
   .hero-copy {
     width: 90%;
   }
