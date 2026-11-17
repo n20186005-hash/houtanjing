@@ -50,3 +50,69 @@ export const extraAttractions: ContentPage[] = [
     profile:{intro:"集集綠色隧道位於集集鎮一帶，林蔭道路與集集線鐵路相鄰，是騎行、地方小旅行和地景攝影的重要路段。它離猴探井較遠，適合作為延伸行程，不宜誤認為步行可達。",tips:["不要在車道中央停留拍照", "鐵路沿線禁止越界進入軌道", "騎車戴安全帽並遵守交通號誌", "雨後道路濕滑、落枝需留心"],highlights:["高大樹木形成的綠蔭廊道", "集集線鐵路景觀", "自行車串聯小鎮", "清晨與午後的光影變化"],basic:[{label:"名稱",value:"集集綠色隧道"},{label:"位置",value:"南投縣集集鎮綠色隧道路段"},{label:"場域",value:"公共景觀道路與鄰近鐵道"},{label:"主管",value:"相關道路及鐵路管理單位各依權責維護"},{label:"建議停留",value:"30–60分鐘，騎行則更久"}],hours:"公共道路依交通管制通行；步道、鐵道班次與各項活動依主管單位公告。",tickets:"欣賞道路林蔭沒有一般景區門票；自行車租借及其他體驗另計。",transport:[{label:"自駕",text:"使用集集綠色隧道專屬定位，僅於合法停車處停靠，不佔用車道。"},{label:"大眾運輸",text:"查詢集集線鐵路營運及客運接駁，確認當日列車是否正常。"},{label:"單車",text:"可結合集集自行車路網，但須遵守共用道路交通規範。"}],charm:[{title:"林蔭景觀",text:"成排樹木在道路上方形成近似隧道的綠色拱廊，呈現植物與交通空間的關係。"},{title:"鐵道文化",text:"鄰近集集線保留了鐵路與小鎮交通相互交織的地方景觀。"},{title:"低速旅行",text:"以步行或騎行方式觀察光影和街景，但必須維持道路安全。"}],route:["抵達合法停車或車站轉乘點", "先確認公共步道與騎行方向", "沿安全開放區欣賞樹冠與林蔭", "在合法觀察位置觀看鐵道而不越界", "延伸到集集鎮其他景點後按原路返回"],guidelines:["不在行車道中央拍照", "不跨越鐵路圍欄、軌道或平交道遮斷器", "自行車與汽車保持安全距離", "尊重沿線居民及植栽"],photoSpots:["安全路側拍樹冠向遠處延伸", "合法觀景點拍鐵道與綠蔭同框", "清晨側光下拍樹影，勿佔用車道"],lodging:"如果安排集集、車埕與水里一整天，可查集集鎮合法旅宿。",reviews:"請由集集綠色隧道專屬 Google Maps 查詢當期交通與訪客意見。",checkedAt:"2026-11-17；南投旅遊網"},facts:[{value:"集集鎮",label:"景觀道路"},{value:"林蔭＋鐵道",label:"觀察主題"}],sections:[{title:"景觀形成",body:"集集綠色隧道由道路兩側的高大樹木形成連續林蔭，與鄰近集集線鐵路共同成為地方交通景觀。"},{title:"步行與騎行重點",body:"沿線光影和樹形是攝影主題，但道路仍有交通用途，絕不可為拍照站在車道中間。"},{title:"資料來源",body:"南投旅遊網 https://travel.nantou.gov.tw/attractions/jiji-green-tunnel/。"}],faqs:[{question:"集集綠色隧道需要門票嗎？",answer:"公共林蔭道路不是收費園區，租車及活動另依營運方規定。"},{question:"能走上鐵軌拍照嗎？",answer:"不能。鐵道與平交道是交通設施，不得進入軌道區。"},{question:"和猴探井距離近嗎？",answer:"屬南投縣不同鄉鎮的延伸遊程，建議開車或搭配公共運輸另排時間。"}],related:["nearby","attractions/route-139","attractions/hengshan-eagle-platform","visit"]
   }
 ];
+
+// 每處景點使用官方景點名稱與核對地址建立獨立導航，而非共用猴探井定位。
+const refinements: Record<string, {
+  mapName: string;
+  address: string;
+  background: string;
+  architecture: string;
+  observe: string;
+  practical: string;
+  source: string;
+}> = {
+  "attractions/hengshan-eagle-platform": {
+    mapName: "橫山賞鷹平台",
+    address: "南投縣南投市永興里橫山地區（八卦台地最高點）",
+    background: "橫山位於八卦山脈南段，海拔442.6公尺，地勢讓遷徙猛禽容易利用氣流經過。灰面鵟鷹春季北返時，可能在此形成盤旋的「鷹柱」；過境並非每日固定的表演，需尊重野生動物自身節律。",
+    architecture: "賞鷹平台以木構觀景棚及開放眺望空間為主，並非宗教或古蹟建築。棚架遮蔭、欄杆與解說設施的設置，是讓人以相對安全、不干擾鳥類的方式停留；與東側茶園、山稜和遠方平原構成清楚的地景層次。",
+    observe: "觀察時先辨認山稜與平原的交界，再用望遠鏡尋找天空中的盤旋猛禽；下午背光可能影響鳥種辨識，可先記錄翅型與飛行方式，回程再比對官方解說。非賞鷹季節則以地形、農業景觀與在地留鳥為觀察重點。",
+    practical: "推薦步行順序：合法停車或公車下車點 → 解說設施 → 觀景棚 → 眺望欄杆內側 → 原路返回。拍攝需站在平台安全範圍，禁用無人機追拍；山路有單車與車輛，切勿在彎道臨停。",
+    source: "https://www.trimt-nsa.gov.tw/zh-tw/attraction/16/",
+  },
+  "attractions/bagua-ecology-center": {
+    mapName: "八卦山脈生態遊客中心暨灰面鵟鷹主題館",
+    address: "500 彰化縣彰化市卦山路13之7號",
+    background: "八卦山脈生態遊客中心於2001年3月17日啟用，主題聚焦每年春分前後經過八卦山的灰面鵟鷹。館舍把在地賞鳥傳統轉化為環境教育，並提供八卦台地地質、植物和旅遊資訊。",
+    architecture: "館舍屬現代遊客服務建築，重點不在古典立面，而在把展場、服務櫃台、互動資訊牆與大型猛禽裝置整合為清晰的教育動線。可以觀察猛禽展件如何以造型、尺度與文字解說呈現鳥類翅膀與遷徙概念。",
+    observe: "先從灰面鵟鷹裝置辨認翅型，再看生態展板理解季節遷徙與台地植物；最後對照八卦山地形圖，思考為何山稜適合猛禽利用上升氣流。若帶孩子，建議分段閱讀，每段只記住一個觀察問題。",
+    practical: "推薦參觀順序：卦山路入口 → 旅遊資訊 → 灰面鵟鷹主題展示 → 地質與植群解說 → 互動區 → 出口。需無障礙協助或團體導覽時，先向參山國家風景區管理處查詢；展區拍照遵循現場標示。",
+    source: "https://www.trimt-nsa.gov.tw/zh-tw/consultant/9948/",
+  },
+  "attractions/tea-two-fingers": {
+    mapName: "茶二指故事館",
+    address: "551 南投縣名間鄉埔中巷32-1號",
+    background: "名間鄉是南投重要的茶業聚落。茶二指故事館由茶業經營團隊以種茶與製茶的產業知識設計展示，試圖讓日常喝茶經驗與茶農栽培、加工、包裝等技術連結；這裡屬民營觀光教育場域。",
+    architecture: "故事館的室內展示、入口識別、園區步道與茶園景觀共同形成參觀環境。和傳統木造古蹟不同，它以現代展示裝置、農業空間與互動設計解釋茶產業；觀察時可比較室內製茶圖解與室外茶樹排列。",
+    observe: "茶園觀察重點包括茶樹修剪的高度、茶畦排列、坡地排水與遮蔭。展示區則從採摘、萎凋、揉捻到乾燥的不同階段理解製茶，勿把各種茶類都視為相同製程。",
+    practical: "推薦參觀順序：埔中巷32-1號入口 → 茶業故事展覽 → 開放茶園步道 → 合法拍照裝置 → 休息區。親子活動先看年齡與收費規定，雨天避免進入泥濘茶畦，也不要採摘農作物。",
+    source: "https://travel.nantou.gov.tw/attractions/finger-tea/",
+  },
+  "attractions/jiji-green-tunnel": {
+    mapName: "集集綠色隧道",
+    address: "552 南投縣集集鎮集集綠色隧道路段（集集線鐵路旁）",
+    background: "集集綠色隧道形成於樹蔭覆蓋的舊道路廊帶。它曾是集集重要聯外通道，後來與自行車旅遊及集集線鐵道景觀一起成為地方觀光路線；不應將整段廊道誤寫成只有一個館舍或門牌的景點。",
+    architecture: "這裡的主要「建築特色」其實是景觀道路的空間結構：兩旁高大樹木形成連續綠色樹冠，與路面、沿線聚落、鐵道路基交織。遠看有拱廊般的透視感，近看能辨認樹幹排列與枝葉形成的遮蔭。",
+    observe: "選擇合法路側的安全位置，觀察樹冠透光與路面明暗變化；若看列車經過，需留在鐵路界線之外，不能跨越圍欄或在平交道停留。騎行時留意路肩、交叉口及車流，而非只盯著拍照景框。",
+    practical: "建議動線：合法停車或集集鎮轉乘點 → 依標示進入自行車道/安全步行段 → 從路側觀察樹形與鐵道 → 返回出發點。若要接明新書院或集集車站，請另規劃路程與火車班次；綠色隧道並非猴探井的步行周邊。",
+    source: "https://www.sunmoonlake.gov.tw/zh-TW/Attractions/Attractions?a=20&id=36",
+  },
+};
+
+for (const page of extraAttractions) {
+  const detail = refinements[page.slug];
+  if (!detail || !page.profile) continue;
+  page.map = map(detail.mapName, detail.address);
+  page.profile.basic = page.profile.basic.map((item) =>
+    item.label === "地址" || item.label === "位置" || item.label === "區域"
+      ? { label: "地址與位置", value: detail.address }
+      : item,
+  );
+  page.sections.splice(2, 0,
+    { title: "景點沿革與地方背景", body: detail.background },
+    { title: "建築、設施與空間特色", body: detail.architecture },
+    { title: "到訪時值得觀察什麼？", body: detail.observe },
+    { title: "步行動線與攝影建議", body: detail.practical },
+    { title: "官方資料與地圖核對", body: `官方參考：${detail.source}。導覽請使用本頁專屬 Google Maps 搜尋連結，確認實際停車與入場位置。` },
+  );
+}
