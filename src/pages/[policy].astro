@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Sources from "../components/Sources.astro";
+import Reviews from "../components/Reviews.astro";
+import { mapLinks, place, reviews } from "../data/site";
+
+const policies = {
+  "privacy-policy": {
+    title: "隱私政策",
+    intro: "我們重視訪客隱私。本政策說明瀏覽本旅遊資訊網站時可能產生的資料、其用途、第三方服務與您的選擇。",
+    sections: [
+      ["資料收集與用途", "本網站不要求註冊帳號，也不提供線上購票。瀏覽時，網站託管與安全服務可能處理 IP 位址、瀏覽器類型、請求時間及所訪問的頁面，以傳送內容、維護安全與排除故障。"],
+      ["網站分析", "本站使用 Google Analytics 衡量頁面瀏覽等整體使用情況。分析功能需經您選擇同意後才載入；您可隨時透過 Cookie 設定頁調整。Google 可能依其服務條款處理相關技術資料。"],
+      ["外部網站與地圖", "Google 地圖、官方旅遊網站等外部連結由第三方營運。點擊後，對方的隱私政策和 Cookie 規則適用；本站不控制外部網站的收集行為。"],
+      ["資料保存與安全", "網站運行所需技術紀錄可能由託管及安全供應商按其保留規則保存。本站不建立旅客個人檔案，不販售訪客個資；任何互聯網傳輸均無法保證零風險。"],
+      ["您的權利與聯繫", "您可以拒絕或撤回非必要分析 Cookie，亦可透過瀏覽器清除儲存資料。如需查詢本政策或要求更正本站掌握的資料，請聯繫 laupetter72@gmail.com。"],
+      ["政策更新", "若網站使用的服務或資料處理方式改變，我們會更新此頁內容及更新日期。"],
+    ],
+  },
+  "terms-of-service": {
+    title: "服務條款",
+    intro: "使用本站前，請了解旅遊資訊的用途、資料限制、外部連結與網站內容的使用規則。",
+    sections: [
+      ["資訊用途", "本站提供免費的景點介紹、交通、路線與文化背景資訊，供個人旅遊規劃參考；並非訂票、售票或景點管理平台。"],
+      ["資訊時效與現場規定", "開放時間、門票、交通、天氣及道路狀況可能變動。出發前請查詢主管機關、景點營運單位和現場公告，並遵守所有安全與管理規定。"],
+      ["旅遊風險", "吊橋、階梯、山區道路與惡劣天候可能涉及風險。本站的路線和建議不能取代個人判斷、專業指示或現場工作人員指引。"],
+      ["圖片、文字與第三方權利", "本站的原創編輯文字受相關著作權規範；引用的照片、地圖、商標與第三方資訊仍屬各權利人。請勿將第三方素材視為本站授權可任意轉載。詳細說明請見圖片版權與資料來源頁。"],
+      ["外部連結", "本站可能連至 Google 地圖、官方觀光資訊等網站；其可用性、內容、隱私及交易條款由對應服務提供者負責。"],
+      ["責任與修改", "本站致力提供清楚資訊，但無法保證所有內容即時且完全無誤。我們可能因資料更新、安全需求或法律要求調整內容及本條款。"],
+      ["聯繫", "網站技術支援或內容更正：laupetter72@gmail.com。"],
+    ],
+  },
+  "image-credits": {
+    title: "圖片來源與版權",
+    intro: "本站所展示的所有圖片，產權及版權均歸原攝影者所有；景點實景照片用於說明地點及景觀。",
+    sections: [
+      ["照片與圖像權利", "圖片可能來自原作者、公開觀光資料或不同的授權來源。本站對圖片的展示不代表擁有其著作權，也不代表訪客取得轉載授權。"],
+      ["來源及更正", "各景點圖片的場景描述與可核對來源會盡可能標在相應頁面。若您是圖片權利人並希望補充署名、調整引用或提出移除要求，請來信提供圖片網址及相關資料。"],
+      ["聯絡信箱", "laupetter72@gmail.com"],
+    ],
+  },
+  "cookie-settings": {
+    title: "Cookie 設定",
+    intro: "您可以控制本站是否載入非必要的瀏覽分析。必要技術儲存用於記住您的選擇和網站運作。",
+    sections: [
+      ["必要功能", "用於保存 Cookie 選擇及網站正常顯示，無法從本頁停用。您仍可在瀏覽器設定中清除本網站的儲存資料。"],
+      ["分析工具", "Google Analytics 可協助我們了解整體頁面使用情況。只有在您選擇允許時才載入；拒絕不影響查看景點文章與地圖連結。"],
+      ["外部連結", "當您主動開啟 Google 地圖或其他第三方網站時，其 Cookie 和隱私政策另行適用。"],
+    ],
+  },
+} as const;
+
+export function getStaticPaths() {
+  return ["privacy-policy", "terms-of-service", "cookie-settings", "sources", "image-credits", "reviews"].map((policy) => ({ params: { policy } }));
+}
+const { policy } = Astro.params;
+const data = policy && policy in policies ? policies[policy as keyof typeof policies] : undefined;
+const title = data?.title ?? (policy === "sources" ? "資料來源" : "評分與評價");
+const intro = data?.intro ?? (policy === "sources" ? "本站參考資料、圖片來源、Google 地圖與旅遊資訊的核對方式。" : "景點公開評分資訊及其來源說明。");
+---
+
+<BaseLayout title={title} description={intro} breadcrumbs={[{ name: "首頁", url: "/" }, { name: title, url: `/${policy}/` }]}>
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="麵包屑導覽"><a href="/">首頁</a><span>/</span><span>{title}</span></nav><p class="eyebrow eyebrow-light">HOUTANJING · 網站資訊</p><h1>{title}</h1><p class="page-lead">{intro}</p></div></header>
+  {policy === "sources" ? <Sources /> : policy === "reviews" ? <section class="section"><div class="container"><Reviews /><p class="policy-note">評價資料同步時間：{reviews.syncedAtLabel}。最新評分與評論請直接查看 <a href={mapLinks.reviews} target="_blank" rel="noopener noreferrer">Google 地圖公開頁面</a>。</p></div></section> : (
+    <section class="section"><div class="narrow policy-sections">
+      {data?.sections.map(([heading, body]) => <section><h2>{heading}</h2><p>{body}</p></section>)}
+      {policy === "cookie-settings" && <div class="cookie-preferences" aria-labelledby="cookie-choice-title"><h2 id="cookie-choice-title">您的分析 Cookie 選擇</h2><label><input id="analytics-choice" type="checkbox" /> 允許 Google Analytics 分析 Cookie</label><p id="cookie-choice-status" aria-live="polite">正在讀取您的選擇…</p><button id="cookie-save" type="button" class="btn btn-dark">儲存設定</button></div>}
+      <p class="policy-note">內容更新：2026 年 11 月 17 日。網站技術支援：<a href="mailto:laupetter72@gmail.com">laupetter72@gmail.com</a>。</p>
+    </div></section>
+  )}
+  {policy === "sources" && <section class="section-tight"><div class="narrow"><h2>資訊核對與更正</h2><p>景點基本資料參考 <a href={place.governmentTourismUrl} target="_blank" rel="noopener noreferrer">參山國家風景區管理處</a>；開放與票價仍以當日公告為準。內容或圖片資料更正請聯繫 <a href="mailto:laupetter72@gmail.com">laupetter72@gmail.com</a>。</p></div></section>}
+  {policy === "cookie-settings" && <script is:inline>
+    const choice = document.getElementById('analytics-choice');
+    const status = document.getElementById('cookie-choice-status');
+    if (choice instanceof HTMLInputElement && status) {
+      choice.checked = localStorage.getItem('houtanjing-analytics-consent') === 'granted';
+      status.textContent = choice.checked ? '目前已允許分析 Cookie。' : '目前未允許分析 Cookie。';
+      document.getElementById('cookie-save')?.addEventListener('click', () => {
+        localStorage.setItem('houtanjing-analytics-consent', choice.checked ? 'granted' : 'denied');
+        status.textContent = '選擇已儲存。重新載入頁面後生效。';
+      });
+    }
+  </script>}
+</BaseLayout>

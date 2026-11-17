@@ -196,14 +196,17 @@ void googleExternalLinks;
     <meta name="twitter:image" content={absoluteImage} />
 
     <!-- Google Analytics 4：G-HXM22WWPKP -->
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP"></script>
     <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        window.dataLayer.push(arguments);
+      if (localStorage.getItem('houtanjing-analytics-consent') === 'granted') {
+        const gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP';
+        document.head.appendChild(gaScript);
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-HXM22WWPKP');
       }
-      gtag("js", new Date());
-      gtag("config", "G-HXM22WWPKP");
     </script>
 
     <!-- 結構化資料（JSON-LD）：WebSite / TouristAttraction / Place / Breadcrumb / FAQPage -->
