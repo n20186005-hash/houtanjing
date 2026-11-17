@@ -39,7 +39,7 @@ export type ContentPage = {
   description: string;
   eyebrow: string;
   lead: string;
-  image: "bridge" | "sunset" | "sunny-hills" | "zhongxing-village" | "zhongxing-hall" | "provincial-archives" | "route-139" | "dream-factory" | "baguashan-buddha" | "shoutian-temple" | "nantou-culture-park" | "nantou-distillery";
+  image: "bridge" | "sunset" | "sunny-hills" | "zhongxing-village" | "zhongxing-hall" | "provincial-archives" | "route-139" | "dream-factory" | "baguashan-buddha" | "shoutian-temple" | "nantou-culture-park" | "nantou-distillery" | "hengshan-eagle-platform" | "bagua-ecology-center" | "tea-two-fingers" | "jiji-green-tunnel";
   imageCredit?: string;
   about?: { heading: string; text: string; source: string; sourceLabel: string };
   map?: { name: string; address: string; url: string };
@@ -400,10 +400,14 @@ export const pages: ContentPage[] = [
       { title: "松柏嶺受天宮", href: "/attractions/shoutian-temple/", body: "名間鄉松柏嶺的玄天上帝信仰中心，適合連同茶鄉景觀認識在地宗教與聚落。", items: ["建議停留：約45–75分鐘", "地址：南投縣名間鄉松山街118號", "導航：松柏嶺受天宮"] },
       { title: "南投縣文化園區・武德殿", href: "/attractions/nantou-culture-park/", body: "位於南投市區的歷史建築園區，以1937年武德殿與地方文化展示為觀察核心。", items: ["建議停留：約45–90分鐘", "地址：南投市彰南路二段65號", "導航：南投縣文化園區"] },
       { title: "南投觀光酒廠", href: "/attractions/nantou-distillery/", body: "從南投的農產加工與釀造產業認識地方製造史；以建築、產業展示和參觀資訊為重點。", items: ["建議停留：約40–70分鐘", "地址：南投市東山路82號", "導航：臺灣菸酒南投觀光酒廠"] },
+      { title: "橫山賞鷹平台", href: "/attractions/hengshan-eagle-platform/", body: "位於八卦山脈高點的生態觀景場域，春季可觀察灰面鵟鷹遷徙，平日也能認識稜線與台地景觀。", items: ["建議停留：約45–75分鐘", "導航：南投橫山賞鷹平台", "賞鳥請保持距離、不使用空拍機追逐鳥類"] },
+      { title: "八卦山脈生態遊客中心", href: "/attractions/bagua-ecology-center/", body: "以灰面鵟鷹、八卦山植物與地質為主題的環境教育展示，可作為山區遊程的知識起點。", items: ["建議停留：約40–70分鐘", "導航：八卦山脈生態遊客中心", "展館開放與活動請查參山國家風景區公告"] },
+      { title: "茶二指故事館", href: "/attractions/tea-two-fingers/", body: "在名間鄉茶產區認識種茶、製茶與地方農業文化，茶園與展示區可安排親子共遊。", items: ["建議停留：約60–90分鐘", "導航：茶二指故事館 名間", "入園票務與活動依營運方公告"] },
+      { title: "集集綠色隧道", href: "/attractions/jiji-green-tunnel/", body: "樟樹林蔭與集集線鐵道並行的景觀道路，適合結合集集小鎮的騎行與散步。", items: ["建議停留：約30–60分鐘", "導航：集集綠色隧道", "不在道路中央或軌道上拍照"] },
     ],
     callout:
       "建議安排順序：微熱山丘（午後前）→ 中興新村散步 → 139 縣道觀景 → 猴探井走橋與夕陽 → 南投市區晚餐。各點營業與道路狀況可能調整，出發前逐一查看當日資訊。",
-    related: ["attractions/sunny-hills", "attractions/zhongxing-new-village", "attractions/route-139", "attractions/zhongxing-hall", "attractions/taiwan-provincial-archives", "attractions/babbuza-dream-factory", "attractions/baguashan-buddha", "attractions/shoutian-temple", "attractions/nantou-culture-park", "attractions/nantou-distillery", "routes/half-day-trip", "routes/route-139", "transport"],
+    related: ["attractions/sunny-hills", "attractions/zhongxing-new-village", "attractions/route-139", "attractions/zhongxing-hall", "attractions/taiwan-provincial-archives", "attractions/babbuza-dream-factory", "attractions/baguashan-buddha", "attractions/shoutian-temple", "attractions/nantou-culture-park", "attractions/nantou-distillery", "attractions/hengshan-eagle-platform", "attractions/bagua-ecology-center", "attractions/tea-two-fingers", "attractions/jiji-green-tunnel", "routes/half-day-trip", "routes/route-139", "transport"],
   },
   {
     slug: "history",
