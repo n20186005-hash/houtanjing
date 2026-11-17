@@ -12,7 +12,7 @@ import FacilitySection from "../components/FacilitySection.astro";
 import VisitorServices from "../components/VisitorServices.astro";
 import EducationSection from "../components/EducationSection.astro";
 import FaqList from "../components/FaqList.astro";
-import { mapLinks, place, site } from "../data/site";
+import { mapLinks, place } from "../data/site";
 
 // 首頁 FAQ（前台可見；同步餵給 BaseLayout 的 FAQPage JSON-LD）
 const faqItems = [
@@ -320,6 +320,41 @@ const landmark2 = place.nearbyLandmarks.landmark2;
           <a href="/nearby"><span>查看附近景點</span></a>
         </article>
       </div>
+    </div>
+  </section>
+
+  <section class="section nearby-discovery" aria-labelledby="nearby-discovery-title">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">EXPLORE NANTOU</p>
+          <h2 id="nearby-discovery-title">周邊遊覽・從天空之橋再往前走</h2>
+        </div>
+        <p>從鄉村三合院、省府聚落到兩座歷史建築與八卦山地名故事，每頁都有獨立地圖與行前建議。</p>
+      </div>
+      <div class="discovery-grid">
+        <a class="discovery-card" href="/attractions/sunny-hills/">
+          <img src="/images/sunny-hills-courtyard.jpg" alt="微熱山丘南投三合院院落實景" loading="lazy" width="547" height="412" />
+          <div><span>01 · 八卦山鄉村風景</span><h3>微熱山丘南投三合院</h3><p>從鳳梨文化與三合院建築，串聯 139 縣道半日遊。</p><strong>探索景點與專屬地圖 ↗</strong></div>
+        </a>
+        <a class="discovery-card" href="/attractions/zhongxing-new-village/">
+          <img src="/images/zhongxing-village-street.jpg" alt="南投中興新村街道實景" loading="lazy" width="2347" height="1323" />
+          <div><span>02 · 城市文化與散步</span><h3>中興新村</h3><p>看省府歷史建築、林蔭大道與花園城市街廓。</p><strong>探索景點與專屬地圖 ↗</strong></div>
+        </a>
+        <a class="discovery-card" href="/guides/houtanjing-name-origin/">
+          <img src="/images/houtanjing-bridge.jpg" alt="猴探井天空之橋實景" loading="lazy" width="1025" height="768" />
+          <div><span>03 · 地方故事</span><h3>猴探井名稱由來</h3><p>分辨地名傳說、夕陽谷歷史與微笑天梯工程。</p><strong>閱讀故事與景點地圖 ↗</strong></div>
+        </a>
+        <a class="discovery-card" href="/attractions/zhongxing-hall/">
+          <img src="/images/zhongxing-hall.jpg" alt="中興新村中興會堂白色建築實景" loading="lazy" width="1200" height="900" />
+          <div><span>04 · 歷史建築與展演</span><h3>中興會堂</h3><p>欣賞小白宮的對稱線條、修復故事與公共活動空間。</p><strong>探索景點與專屬地圖 ↗</strong></div>
+        </a>
+        <a class="discovery-card" href="/attractions/taiwan-provincial-archives/">
+          <img src="/images/provincial-archives.jpg" alt="臺灣省政資料館建築實景" loading="lazy" width="1200" height="900" />
+          <div><span>05 · 省政檔案與文化</span><h3>臺灣省政資料館</h3><p>理解省府史料、歷史建築與中興新村文化景觀。</p><strong>探索景點與專屬地圖 ↗</strong></div>
+        </a>
+      </div>
+      <p class="discovery-more"><a href="/nearby">查看全部附近景點與順遊路線 →</a></p>
     </div>
   </section>
 

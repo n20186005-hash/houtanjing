@@ -16,12 +16,15 @@ interface Props {
 }
 
 const { page } = Astro.props;
-const imagePath =
-  page.image === "sunset" ? "/images/houtanjing-sunset.jpg" : "/images/houtanjing-bridge.jpg";
-const imageAlt =
-  page.image === "sunset"
-    ? "猴探井天空之橋、八卦山谷與西向夕陽"
-    : "猴探井天空之橋橫跨八卦山谷";
+const images = {
+  sunset: { src: "/images/houtanjing-sunset.jpg", alt: "猴探井天空之橋、八卦山谷與西向夕陽" },
+  bridge: { src: "/images/houtanjing-bridge.jpg", alt: "猴探井天空之橋橫跨八卦山谷" },
+  "sunny-hills": { src: "/images/sunny-hills-courtyard.jpg", alt: "南投微熱山丘三合院實景，傳統院落與低矮建築" },
+  "zhongxing-village": { src: "/images/zhongxing-village-street.jpg", alt: "南投中興新村街道實景" },
+  "zhongxing-hall": { src: "/images/zhongxing-hall.jpg", alt: "南投中興新村中興會堂白色歷史建築實景" },
+  "provincial-archives": { src: "/images/provincial-archives.jpg", alt: "南投臺灣省政資料館歷史建築實景" },
+};
+const { src: imagePath, alt: imageAlt } = images[page.image];
 const relatedPages = page.related
   .map((slug) => pageBySlug[slug])
   .filter((related): related is ContentPage => Boolean(related));
@@ -47,8 +50,15 @@ const breadcrumbs = [
           <span aria-current="page">{page.shortTitle}</span>
         </nav>
         <p class="eyebrow eyebrow-light">{page.eyebrow}</p>
-        <h1>{page.title}</h1>
+        <h1>{page.displayName ?? page.title}</h1>
+        {page.tagline && <p class="profile-tagline">{page.tagline}</p>}
         <p class="page-lead">{page.lead}</p>
+        {page.profile && page.map && (
+          <div class="profile-hero-meta">
+            <span>營業・費用：依各景點官方及現場資訊</span>
+            <a href={page.map.url} target="_blank" rel="noopener noreferrer">📍 {page.map.name}地圖 ↗</a>
+          </div>
+        )}
         {
           page.facts && (
             <div class="page-facts" aria-label="頁面重點資訊">
@@ -63,17 +73,86 @@ const breadcrumbs = [
         }
       </div>
       <figure class="page-hero-image">
-        <img src={imagePath} alt={`${place.name}（${place.city}）${imageAlt}`} width="1189" height="768" loading="eager" />
+        <img src={imagePath} alt={imageAlt} width="1189" height="768" loading="eager" />
         <figcaption class="image-caption">
-          景觀影像：交通部觀光署參山國家風景區管理處（本圖片版權歸原攝影者所有）
+          {page.imageCredit ?? "景觀影像：交通部觀光署參山國家風景區管理處（本圖片版權歸原攝影者所有）"}
         </figcaption>
       </figure>
     </div>
   </header>
 
+  {page.about && (
+    <section class="section attraction-about" aria-labelledby="about-place-title">
+      <div class="container attraction-about-inner">
+        <div>
+          <p class="eyebrow">關於景點 · 管理與文化</p>
+          <h2 id="about-place-title">{page.about.heading}</h2>
+        </div>
+        <div>
+          <p>{page.about.text}</p>
+          <a href={page.about.source} target="_blank" rel="noopener noreferrer">管理與背景資料：{page.about.sourceLabel} ↗</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {page.profile && (
+    <section class="section profile-discover">
+      <div class="container profile-discover-grid">
+        <div>
+          <p class="eyebrow">DISCOVER</p>
+          <h2>探索{page.map?.name ?? page.shortTitle}</h2>
+          <p>{page.profile.intro}</p>
+        </div>
+        <div class="profile-discover-aside">
+          <h3>遊覽建議</h3>
+          <ul>{page.profile.tips.map((tip) => <li>{tip}</li>)}</ul>
+          <h3>景區特色</h3>
+          <ul>{page.profile.highlights.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {page.profile && (
+    <section class="section profile-details">
+      <div class="container profile-details-inner">
+        <p class="eyebrow">PRACTICAL INFORMATION</p>
+        <h2>基本資料</h2>
+        <dl class="profile-fact-list">{page.profile.basic.map((fact) => <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>
+        <div class="profile-info-grid">
+          <section><h2>開放時間</h2><p>{page.profile.hours}</p></section>
+          <section><h2>門票價格</h2><p>{page.profile.tickets}</p></section>
+        </div>
+        <section class="profile-block">
+          <h2>交通方式</h2>
+          <div class="profile-info-grid">{page.profile.transport.map((way) => <div><h3>{way.label}</h3><p>{way.text}</p></div>)}</div>
+        </section>
+        <section class="profile-block">
+          <h2>發現魅力</h2>
+          <div class="profile-info-grid">{page.profile.charm.map((feature) => <div><h3>{feature.title}</h3><p>{feature.text}</p></div>)}</div>
+        </section>
+        <section class="profile-block">
+          <h2>推薦遊覽路線</h2>
+          <ol class="profile-route">{page.profile.route.map((step) => <li>{step}</li>)}</ol>
+        </section>
+        <div class="profile-info-grid profile-block">
+          <section><h2>遊覽須知</h2><ul>{page.profile.guidelines.map((item) => <li>{item}</li>)}</ul></section>
+          <section><h2>拍照機位</h2><ol>{page.profile.photoSpots.map((item) => <li>{item}</li>)}</ol></section>
+        </div>
+        <div class="profile-info-grid profile-block">
+          <section><h2>住宿建議</h2><p>{page.profile.lodging}</p></section>
+          <section><h2>遊客評價</h2><p>{page.profile.reviews}</p><a href={page.map?.url} target="_blank" rel="noopener noreferrer">查看此景點 Google 地圖公開評價 ↗</a></section>
+        </div>
+        <p class="profile-verified">資料核對：{page.profile.checkedAt}。如遇營運異動，以當日主管或營運單位公告為準。</p>
+      </div>
+    </section>
+  )}
+
   <article class="section">
     <div class="container article-grid">
       <div class="article-main">
+        {page.profile && <h2 class="profile-extra-heading">深入閱讀與延伸建議</h2>}
         {
           page.sections.map((section, index) => (
             <section class="content-section" id={`section-${index + 1}`}>
@@ -100,6 +179,18 @@ const breadcrumbs = [
             </section>
           )
         }
+
+        {page.map && (
+          <section class="content-section" id="place-navigation">
+            <p class="eyebrow">獨立景點導航</p>
+            <h2>{page.map.name}位置與交通查詢</h2>
+            <p>{page.map.address}。地圖已依本頁景點分別設定；實際交通與入口位置請以地圖與現場告示為準。</p>
+            <div class="map-actions">
+              <a class="btn btn-dark" href={page.map.url} target="_blank" rel="noopener noreferrer">查看{page.map.name}地圖 ↗</a>
+              <a class="btn btn-outline" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(page.map.name + ' ' + page.map.address)}`} target="_blank" rel="noopener noreferrer">導航至{page.map.name} ↗</a>
+            </div>
+          </section>
+        )}
 
         {
           page.slug === "map" && (
@@ -165,7 +256,7 @@ const breadcrumbs = [
           ))
         }
         {page.faqs && <a href="#faq-page-title">常見問題</a>}
-        <a href={mapLinks.search} target="_blank" rel="noopener noreferrer">
+        <a href={page.map?.url ?? mapLinks.search} target="_blank" rel="noopener noreferrer">
           開啟 Google 地圖 ↗
         </a>
       </aside>
