@@ -1,3 +1,5 @@
+import { extraAttractions } from "./extra-attractions";
+
 export type ContentSection = {
   eyebrow?: string;
   title: string;
@@ -37,7 +39,7 @@ export type ContentPage = {
   description: string;
   eyebrow: string;
   lead: string;
-  image: "bridge" | "sunset" | "sunny-hills" | "zhongxing-village" | "zhongxing-hall" | "provincial-archives" | "route-139" | "dream-factory";
+  image: "bridge" | "sunset" | "sunny-hills" | "zhongxing-village" | "zhongxing-hall" | "provincial-archives" | "route-139" | "dream-factory" | "baguashan-buddha" | "shoutian-temple" | "nantou-culture-park" | "nantou-distillery";
   imageCredit?: string;
   about?: { heading: string; text: string; source: string; sourceLabel: string };
   map?: { name: string; address: string; url: string };
@@ -394,10 +396,14 @@ export const pages: ContentPage[] = [
           "營業時間與休館日以各店家公告為準",
         ],
       },
+      { title: "八卦山大佛風景區", href: "/attractions/baguashan-buddha/", body: "彰化市的八卦山地標，觀察大佛、山城視野與公共步道；可另排半天，不與猴探井混用定位。", items: ["建議停留：約60–90分鐘", "觀察重點：大佛、廣場與城市地形", "導航：八卦山大佛風景區（彰化市）"] },
+      { title: "松柏嶺受天宮", href: "/attractions/shoutian-temple/", body: "名間鄉松柏嶺的玄天上帝信仰中心，適合連同茶鄉景觀認識在地宗教與聚落。", items: ["建議停留：約45–75分鐘", "地址：南投縣名間鄉松山街118號", "導航：松柏嶺受天宮"] },
+      { title: "南投縣文化園區・武德殿", href: "/attractions/nantou-culture-park/", body: "位於南投市區的歷史建築園區，以1937年武德殿與地方文化展示為觀察核心。", items: ["建議停留：約45–90分鐘", "地址：南投市彰南路二段65號", "導航：南投縣文化園區"] },
+      { title: "南投觀光酒廠", href: "/attractions/nantou-distillery/", body: "從南投的農產加工與釀造產業認識地方製造史；以建築、產業展示和參觀資訊為重點。", items: ["建議停留：約40–70分鐘", "地址：南投市東山路82號", "導航：臺灣菸酒南投觀光酒廠"] },
     ],
     callout:
       "建議安排順序：微熱山丘（午後前）→ 中興新村散步 → 139 縣道觀景 → 猴探井走橋與夕陽 → 南投市區晚餐。各點營業與道路狀況可能調整，出發前逐一查看當日資訊。",
-    related: ["attractions/sunny-hills", "attractions/zhongxing-new-village", "attractions/route-139", "attractions/zhongxing-hall", "attractions/taiwan-provincial-archives", "attractions/babbuza-dream-factory", "routes/half-day-trip", "routes/route-139", "transport"],
+    related: ["attractions/sunny-hills", "attractions/zhongxing-new-village", "attractions/route-139", "attractions/zhongxing-hall", "attractions/taiwan-provincial-archives", "attractions/babbuza-dream-factory", "attractions/baguashan-buddha", "attractions/shoutian-temple", "attractions/nantou-culture-park", "attractions/nantou-distillery", "routes/half-day-trip", "routes/route-139", "transport"],
   },
   {
     slug: "history",
@@ -1002,6 +1008,7 @@ export const pages: ContentPage[] = [
     faqs:[{question:"半山夢工廠和猴探井是同一個園區嗎？",answer:"不是。半山夢工廠是南崗工業區的民營室內觀光工廠，猴探井天空之橋是八卦山戶外吊橋景點，地址與管理不同。"},{question:"雨天可以去半山夢工廠嗎？",answer:"室內展區較不受小雨影響，但仍需確認是否開館，極限設施可能有獨立管制。"},{question:"生命樹需要另外買票嗎？",answer:"館內入場與不同設施可能採不同票務，實際價格及限制請以場館當日公告為準。"}],
     related:["nearby","attractions/route-139","attractions/zhongxing-new-village","visit","routes/half-day-trip"],
   },
+  ...extraAttractions,
 ];
 
 export const pageBySlug = Object.fromEntries(pages.map((page) => [page.slug, page]));
