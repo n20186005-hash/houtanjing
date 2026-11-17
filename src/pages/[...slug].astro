@@ -16,12 +16,13 @@ interface Props {
 }
 
 const { page } = Astro.props;
-const imagePath =
-  page.image === "sunset" ? "/images/houtanjing-sunset.jpg" : "/images/houtanjing-bridge.jpg";
-const imageAlt =
-  page.image === "sunset"
-    ? "猴探井天空之橋、八卦山谷與西向夕陽"
-    : "猴探井天空之橋橫跨八卦山谷";
+const images = {
+  sunset: { src: "/images/houtanjing-sunset.jpg", alt: "猴探井天空之橋、八卦山谷與西向夕陽" },
+  bridge: { src: "/images/houtanjing-bridge.jpg", alt: "猴探井天空之橋橫跨八卦山谷" },
+  "sunny-hills": { src: "/images/sunny-hills-courtyard.jpg", alt: "南投微熱山丘三合院實景，傳統院落與低矮建築" },
+  "zhongxing-village": { src: "/images/zhongxing-village-street.jpg", alt: "南投中興新村街道實景" },
+};
+const { src: imagePath, alt: imageAlt } = images[page.image];
 const relatedPages = page.related
   .map((slug) => pageBySlug[slug])
   .filter((related): related is ContentPage => Boolean(related));
@@ -63,13 +64,28 @@ const breadcrumbs = [
         }
       </div>
       <figure class="page-hero-image">
-        <img src={imagePath} alt={`${place.name}（${place.city}）${imageAlt}`} width="1189" height="768" loading="eager" />
+        <img src={imagePath} alt={imageAlt} width="1189" height="768" loading="eager" />
         <figcaption class="image-caption">
-          景觀影像：交通部觀光署參山國家風景區管理處（本圖片版權歸原攝影者所有）
+          {page.imageCredit ?? "景觀影像：交通部觀光署參山國家風景區管理處（本圖片版權歸原攝影者所有）"}
         </figcaption>
       </figure>
     </div>
   </header>
+
+  {page.about && (
+    <section class="section attraction-about" aria-labelledby="about-place-title">
+      <div class="container attraction-about-inner">
+        <div>
+          <p class="eyebrow">關於景點 · 管理與文化</p>
+          <h2 id="about-place-title">{page.about.heading}</h2>
+        </div>
+        <div>
+          <p>{page.about.text}</p>
+          <a href={page.about.source} target="_blank" rel="noopener noreferrer">管理與背景資料：{page.about.sourceLabel} ↗</a>
+        </div>
+      </div>
+    </section>
+  )}
 
   <article class="section">
     <div class="container article-grid">
@@ -100,6 +116,18 @@ const breadcrumbs = [
             </section>
           )
         }
+
+        {page.map && (
+          <section class="content-section" id="place-navigation">
+            <p class="eyebrow">獨立景點導航</p>
+            <h2>{page.map.name}位置與交通查詢</h2>
+            <p>{page.map.address}。這是本頁景點的專屬 Google Maps 搜尋，而非猴探井天空之橋的共用定位；實際交通請以地圖與現場告示為準。</p>
+            <div class="map-actions">
+              <a class="btn btn-dark" href={page.map.url} target="_blank" rel="noopener noreferrer">查看{page.map.name}地圖 ↗</a>
+              <a class="btn btn-outline" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(page.map.name)}`} target="_blank" rel="noopener noreferrer">導航至{page.map.name} ↗</a>
+            </div>
+          </section>
+        )}
 
         {
           page.slug === "map" && (
@@ -165,7 +193,7 @@ const breadcrumbs = [
           ))
         }
         {page.faqs && <a href="#faq-page-title">常見問題</a>}
-        <a href={mapLinks.search} target="_blank" rel="noopener noreferrer">
+        <a href={page.map?.url ?? mapLinks.search} target="_blank" rel="noopener noreferrer">
           開啟 Google 地圖 ↗
         </a>
       </aside>
