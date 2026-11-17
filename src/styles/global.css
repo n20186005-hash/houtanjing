@@ -1124,6 +1124,27 @@ summary {
 .article-main {
   display: grid;
   gap: 72px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.footer-simple { display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; position: relative; }
+.footer-identity { max-width: 490px; }
+.footer-identity p { margin: 0 0 12px; }
+.footer-legal-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px 20px; max-width: 550px; }
+.footer-legal-links a { color: inherit; text-underline-offset: 3px; }
+.policy-sections { display: grid; gap: 35px; }
+.policy-sections section { border-bottom: 1px solid var(--stone-200); padding-bottom: 24px; }
+.policy-sections h2, .cookie-preferences h2 { color: var(--forest-950); font-size: clamp(1.4rem, 3vw, 1.9rem); }
+.policy-sections p, .policy-note { overflow-wrap: anywhere; color: var(--ink-700); }
+.policy-sections a, .policy-note a { text-underline-offset: 3px; }
+.cookie-preferences { padding: 25px; border-radius: 18px; background: var(--forest-100); }
+.cookie-preferences label { display: flex; align-items: center; gap: 12px; font-weight: 650; }
+.cookie-preferences input { width: 20px; height: 20px; accent-color: var(--forest-800); }
+.cookie-preferences button { margin-top: 12px; }
+@media (max-width: 800px) {
+  .footer-simple { flex-direction: column; }
+  .footer-legal-links { justify-content: flex-start; }
 }
 
 .content-section {

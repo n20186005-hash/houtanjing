@@ -1,8 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import MapCard from "../components/MapCard.astro";
-import Reviews from "../components/Reviews.astro";
-import Sources from "../components/Sources.astro";
 import WeatherCard from "../components/WeatherCard.astro";
 import SeasonalStrategy from "../components/SeasonalStrategy.astro";
 import HistorySection from "../components/HistorySection.astro";
@@ -485,13 +483,6 @@ const landmark2 = place.nearbyLandmarks.landmark2;
     </div>
   </section>
 
-  <!-- 評價區塊：Google 地圖評價同步（不寫入 JSON-LD） -->
-  <section class="section">
-    <div class="container">
-      <Reviews />
-    </div>
-  </section>
-
   <!-- NEW：周邊設施中立類型概述 -->
   <FacilitySection />
 
@@ -514,6 +505,4 @@ const landmark2 = place.nearbyLandmarks.landmark2;
   <!-- NEW：科普與訪客責任 -->
   <EducationSection />
 
-  <!-- 資料來源區塊：圖片版權 + 評價來源 + 官方觀光 -->
-  <Sources />
 </BaseLayout>
