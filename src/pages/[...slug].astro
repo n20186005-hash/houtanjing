@@ -23,6 +23,8 @@ const images = {
   "zhongxing-village": { src: "/images/zhongxing-village-street.jpg", alt: "南投中興新村街道實景" },
   "zhongxing-hall": { src: "/images/zhongxing-hall.jpg", alt: "南投中興新村中興會堂白色歷史建築實景" },
   "provincial-archives": { src: "/images/provincial-archives.jpg", alt: "南投臺灣省政資料館歷史建築實景" },
+  "route-139": { src: "/images/route-139-green-tunnel.jpg", alt: "八卦山縣道139線綠色隧道林蔭道路實景" },
+  "dream-factory": { src: "/images/babbuza-dream-factory.png", alt: "南投樹德半山夢工廠建築與展示空間實景" },
 };
 const { src: imagePath, alt: imageAlt } = images[page.image];
 const relatedPages = page.related
@@ -164,6 +166,7 @@ const breadcrumbs = [
                   {section.items.map((item) => <li>{item}</li>)}
                 </ul>
               )}
+              {section.href && <p><a class="btn btn-outline" href={section.href}>閱讀完整景點介紹與專屬導航 →</a></p>}
             </section>
           ))
         }

@@ -3,6 +3,7 @@ export type ContentSection = {
   title: string;
   body?: string;
   items?: string[];
+  href?: string;
 };
 
 export type FAQ = {
@@ -36,7 +37,7 @@ export type ContentPage = {
   description: string;
   eyebrow: string;
   lead: string;
-  image: "bridge" | "sunset" | "sunny-hills" | "zhongxing-village" | "zhongxing-hall" | "provincial-archives";
+  image: "bridge" | "sunset" | "sunny-hills" | "zhongxing-village" | "zhongxing-hall" | "provincial-archives" | "route-139" | "dream-factory";
   imageCredit?: string;
   about?: { heading: string; text: string; source: string; sourceLabel: string };
   map?: { name: string; address: string; url: string };
@@ -339,6 +340,7 @@ export const pages: ContentPage[] = [
     sections: [
       {
         title: "微熱山丘南投三合院",
+        href: "/attractions/sunny-hills/",
         body:
           "適合放在猴探井之前，先以台灣三合院與鳳梨酥作為輕鬆開場，再往山區移動。適合第一次到訪與帶長輩同行。",
         items: [
@@ -349,6 +351,7 @@ export const pages: ContentPage[] = [
       },
       {
         title: "中興新村",
+        href: "/attractions/zhongxing-new-village/",
         body:
           "樹蔭、老建築與生活街區讓行程節奏更舒展。可安排午餐或午後散步，再把夕陽時段留給猴探井。",
         items: [
@@ -359,6 +362,7 @@ export const pages: ContentPage[] = [
       },
       {
         title: "139 縣道沿線",
+        href: "/attractions/route-139/",
         body:
           "山稜道路與觀景停靠點是自駕旅程的主角之一。請只在合法、安全的位置停車，不在彎道臨停拍照。",
         items: [
@@ -369,16 +373,19 @@ export const pages: ContentPage[] = [
       },
       {
         title: "中興會堂・小白宮",
+        href: "/attractions/zhongxing-hall/",
         body: "位於光榮北路1號的中興會堂建於1957年，是中興新村代表性的白色歷史建築。2026年修復重新啟用，適合觀察對稱立面、操場與花園城市空間；室內依活動開放。完整介紹請閱讀本站「中興會堂」專頁。",
         items: ["建議停留：外觀與周邊步行約30–60分鐘", "獨立地圖搜尋：中興會堂 南投 光榮北路1號", "室內展演及活動安排以國家發展委員會公告為準"],
       },
       {
         title: "臺灣省政資料館",
+        href: "/attractions/taiwan-provincial-archives/",
         body: "位於中興新村中正路2號的歷史館舍，以省政史料、展示空間與公共接待建築為主題。與中興會堂是不同場館，值得另排一站；參觀與導覽依預約及現場開放安排。詳細資訊見本站「臺灣省政資料館」專頁。",
         items: ["建議停留：約45–90分鐘，視開放展區而定", "獨立地圖搜尋：臺灣省政資料館 中正路2號", "公開時間週二至週日09:00–17:00，週一及國定假日休館，行前核實"],
       },
       {
         title: "南投市區與半山夢工廠",
+        href: "/attractions/babbuza-dream-factory/",
         body:
           "若同行者偏好室內空間，可將市區景點放在白天，傍晚再上山。兩者形成室內與戶外的平衡。",
         items: [
@@ -390,7 +397,7 @@ export const pages: ContentPage[] = [
     ],
     callout:
       "建議安排順序：微熱山丘（午後前）→ 中興新村散步 → 139 縣道觀景 → 猴探井走橋與夕陽 → 南投市區晚餐。各點營業與道路狀況可能調整，出發前逐一查看當日資訊。",
-    related: ["attractions/sunny-hills", "attractions/zhongxing-new-village", "attractions/zhongxing-hall", "attractions/taiwan-provincial-archives", "routes/half-day-trip", "routes/route-139", "transport"],
+    related: ["attractions/sunny-hills", "attractions/zhongxing-new-village", "attractions/route-139", "attractions/zhongxing-hall", "attractions/taiwan-provincial-archives", "attractions/babbuza-dream-factory", "routes/half-day-trip", "routes/route-139", "transport"],
   },
   {
     slug: "history",
@@ -932,6 +939,68 @@ export const pages: ContentPage[] = [
     ],
     faqs: [{ question: "猴探井真的有猴子和水井嗎？", answer: "名稱由來常以猴子探井的地形意象解釋，但不能因此斷言現場仍有特定古井或野生猴群。" }, { question: "猴探井和天空之橋是同一個地方嗎？", answer: "猴探井是地區與遊憩區名稱，天空之橋則是其中知名的階梯吊橋設施。" }],
     related: ["history", "visit", "sunset", "nearby"],
+  },
+  {
+    slug: "attractions/route-139",
+    title: "八卦山縣道139線景觀道路｜綠色隧道、猴探井與安全順遊攻略",
+    shortTitle: "縣道139線景觀道路",
+    displayName: "縣道139線景觀道路",
+    tagline: "八卦山稜線・綠色隧道・南投與彰化之間的風景旅程",
+    description: "縣道139線八卦山景觀道路介紹：沿線林蔭、地形、歷史、停靠點、騎乘安全、觀景路線、交通與獨立 Google 地圖。",
+    eyebrow: "八卦山周邊景點",
+    lead: "沿八卦山稜線延伸的縣道139線，是串聯猴探井天空之橋、微熱山丘和其他山區景點的風景道路。它是一條正在使用中的公路，而不是可任意停車拍照的觀光步道。",
+    image: "route-139",
+    imageCredit: "縣道139線綠色隧道照片來源：參山國家風景區管理處",
+    about: { heading: "關於縣道139線景觀道路", text: "縣道139線是八卦山地區的公共道路，沿線風景與觀光介紹由交通部觀光署參山國家風景區管理處提供；道路交通、養護及交通管制依各路段道路主管機關、地方政府與警察機關分工辦理。路線北接八卦山一帶，向南串聯猴探井、松柏嶺及名間，並非單一門票園區。造訪時應遵守公共道路安全規範。", source: "https://www.trimt-nsa.gov.tw/zh-tw/attraction/18/", sourceLabel: "參山國家風景區管理處景觀道路介紹" },
+    map: { name: "縣道139線景觀道路・八卦山", address: "臺灣彰化縣至南投縣八卦山沿線；路線型景點無單一門牌，以猴探井街300號為南投段停靠參考", url: "https://www.google.com/maps/search/?api=1&query=%E7%B8%A3%E9%81%93139%E7%B7%9A%E6%99%AF%E8%A7%80%E9%81%93%E8%B7%AF%20%E5%85%AB%E5%8D%A6%E5%B1%B1" },
+    profile: {
+      intro: "八卦山綠色隧道以濃密樹冠與隨季節變化的光影著稱。沿線可見丘陵、農田及聚落，亦是自行車與機車常使用的道路。想欣賞風景，應先選定合法停車的目的地，再步行到開放觀景空間。",
+      tips: ["出發前查看道路施工與天氣，雨霧時減速", "優先把微熱山丘與猴探井作為獨立停靠點", "騎車及開車都須留意彎道視距與後方來車", "不要在道路中央、彎道或車道旁臨停拍照"],
+      highlights: ["樹蔭形成的綠色隧道", "八卦山稜線與西部平原地景", "串聯猴探井與松柏嶺的公路旅行", "不同季節樹木與農村景色的變化"],
+      basic: [{label:"類型",value:"縣道景觀公路與沿線觀景路線"},{label:"範圍",value:"彰化八卦山至南投名間、松柏嶺方向的縣道139線路段"},{label:"定位",value:"以個別停靠地點導航；路線沒有統一門牌"},{label:"管理",value:"道路主管機關依路段管理，參山國家風景區管理處提供觀光資訊"},{label:"建議時間",value:"約1–2小時含獨立停靠點；不含各景點完整參觀"}],
+      hours: "公共道路原則上可通行，但交通事故、施工、氣象與臨時管制可能影響通行。沿線景點各有獨立營業時間。", tickets: "行經一般縣道不收景點門票；猴探井天空之橋等獨立設施如有收費，應依各自公告辦理。",
+      transport: [{label:"自駕",text:"沿縣道139線依導航前往已選定的景點停車場，不把景觀道路搜尋結果當作唯一入口。"},{label:"單車",text:"路線有坡度與車流，需具備適當騎乘能力、照明及防護設備；不在彎道聚集。"},{label:"大眾運輸",text:"部分山稜路段班次有限，須查詢出發日客運班表與回程，不能假設所有觀景路段都有站牌。"}],
+      charm: [{title:"地形與路線",text:"縣道沿八卦山臺地與稜線穿行，讓道路本身成為理解山地和平原交界的線索。"},{title:"綠色隧道",text:"部分路段樹冠跨越道路，日光在葉片間形成連續光斑；季節、修枝與天氣都會改變景觀。"},{title:"人與道路",text:"公路承擔居民通勤與農業運輸，也是旅遊及騎乘路線，因此安全始終比拍照更重要。"}],
+      route: ["先確認天氣、道路管制與預定停靠點", "由南投市或彰化側接入縣道139線並依速限行駛", "在微熱山丘等允許停車的場所短暫休息", "另行導航至猴探井天空之橋，確認橋梁開放與停車", "依當日時間決定續往松柏嶺或返回市區"],
+      guidelines: ["不在車道或路肩違停", "勿為了照片闖入農地與私人土地", "尊重單車與機車使用者", "雷雨、濃霧或落葉濕滑時縮短行程"],
+      photoSpots: ["合法停車點周邊的公共步行區：拍林蔭透視", "猴探井園區內：拍山谷與橋梁線條", "已開放觀景平台：以安全護欄內位置拍平原遠景"],
+      lodging: "若安排多站山稜行程，可選擇南投市、草屯或彰化市區的合法旅宿，依實際交通與次日目的地決定。", reviews: "道路屬範圍型景點，地圖上可能有不同路段及停靠點評價；不合併成單一未核實星等。", checkedAt: "2026-11-17；參山國家風景區管理處與觀光署公開資料",
+    },
+    facts: [{value:"八卦山",label:"景觀稜線"},{value:"公共道路",label:"遵守交通管制"}],
+    sections: [{title:"歷史與地形背景",body:"縣道139線隨八卦山聚落與農業交通的需求形成重要南北道路，如今連結不同觀光景點。沿線地勢起伏、林蔭與農田使每段視野各異，不能把整條道路當成一個收費景區。"},{title:"建築與文化觀察",body:"沿途不是單一建築群；可以觀察農村院落、山坡耕作方式及與城市交界的道路尺度。進入個別場館應遵守該場館管理規定。"},{title:"停車與攝影",body:"以有正式車位的景點作為停靠基點。綠色隧道景觀雖適合欣賞，但沒有安全停車空間時應直接通過，切勿在彎道取景。"},{title:"參考來源",body:"參山國家風景區管理處「縣139線景觀道路」https://www.trimt-nsa.gov.tw/zh-tw/attraction/18/；資料查閱：2026-11-17。"}],
+    faqs: [{question:"沿139線可以隨時停下拍照嗎？",answer:"不可以。請在合法停車處停車，並確認有安全的步行或觀景空間。"},{question:"139線有固定門票或開放時間嗎？",answer:"一般公共道路沒有統一景區門票；但可能有臨時交通管制，各景點另有營業與收費規定。"},{question:"能從微熱山丘一路走到猴探井嗎？",answer:"不建議把車流道路當作園內步道。應另行導航、依交通方式安全移動。"}],
+    related: ["nearby","attractions/sunny-hills","attractions/babbuza-dream-factory","routes/route-139","transport"],
+  },
+  {
+    slug: "attractions/babbuza-dream-factory",
+    title: "樹德半山夢工廠｜南投室內景點、生命樹、交通與參觀攻略",
+    shortTitle: "樹德半山夢工廠",
+    displayName: "樹德半山夢工廠",
+    tagline: "南投南崗工業區・室內生命樹與製造文化體驗",
+    description: "南投半山夢工廠完整介紹：工業南六路6號、生命樹建築、製造展示、親子活動、交通停車、入場費用查詢、參觀路線與 Google 地圖。",
+    eyebrow: "南投市周邊景點",
+    lead: "樹德半山夢工廠把收納製造業、設計、南島文化與室內探索體驗結合，是安排南投市行程時的一處室內停靠點；和戶外的猴探井天空之橋可依天氣交換順序。",
+    image: "dream-factory",
+    imageCredit: "樹德半山夢工廠實景，臺灣觀光工廠資料平台",
+    about: {heading:"關於樹德半山夢工廠",text:"樹德半山夢工廠由樹德企業規劃與經營，是以製造、教育、設計與文化體驗為主軸的民營觀光工廠，並非由南投縣政府經營的公共公園。館內展區、活動、票務、停車與安全規範由營運單位管理；相關觀光資訊亦可對照經濟部創意生活網與交通部觀光署公開介紹。",source:"https://keid.nat.gov.tw/creativelife/information/enjoy_ct?id=205",sourceLabel:"經濟部創意生活網介紹"},
+    map: {name:"樹德半山夢工廠 BABBUZA DREAMFACTORY",address:"540 南投縣南投市工業南六路6號",url:"https://www.google.com/maps/search/?api=1&query=%E6%A8%B9%E5%BE%B7%E5%8D%8A%E5%B1%B1%E5%A4%A2%E5%B7%A5%E5%BB%A0%20%E5%B7%A5%E6%A5%AD%E5%8D%97%E5%85%AD%E8%B7%AF6%E8%99%9F"},
+    profile: {
+      intro:"位於南投市南崗工業區的半山夢工廠，將工廠生產與觀光體驗置於同一個大型室內空間。高聳的木構生命樹是最鮮明的空間地標，館內另有與收納製程、文化、設計及手作相關的展示。",
+      tips:["先確認當日營業、門票和特別體驗預約", "親子同行先確認身高與年齡限制", "有懼高或行動不便者可優先選擇平面展示", "下雨天可把室內參觀排在前段，晴朗午後再到猴探井"],
+      highlights:["挑高室內木構生命樹", "塑膠與鈑金製程展示", "南島文化與在地設計元素", "手作、互動及餐飲空間依現場開放"],
+      basic:[{label:"正式名稱",value:"樹德半山夢工廠 BABBUZA DREAMFACTORY"},{label:"地址",value:"540 南投縣南投市工業南六路6號"},{label:"場域類型",value:"民營觀光工廠、室內文化與體驗場館"},{label:"管理主體",value:"樹德企業／半山夢工廠營運團隊"},{label:"建議停留",value:"約1.5–3小時，依展區及付費體驗調整"}],
+      hours:"營業日、入館時間與各展區活動時段請以半山夢工廠官方當日資訊為準；展演、體驗及假期可能調整。",tickets:"入場收費、折抵、體驗課程與特殊設施可能分開計價；請以官方售票及現場告示核實，不將其他南投景點門票套用於此。",
+      transport:[{label:"自駕",text:"由國道三號南投或中興交流道方向進入南崗工業區，導航至工業南六路6號，依場館指示停車。"},{label:"大眾運輸",text:"請先查詢至南投市區或南崗工業區的當日客運班次、站點與最後步行距離，回程也需預先確認。"},{label:"搭配猴探井",text:"兩處位於不同位置，建議使用各自 Google Maps 導航，勿以同一個定位指向兩處。"}],
+      charm:[{title:"製造文化",text:"展區把收納用品背後的設計與製程轉化為可理解的觀察體驗，能看見台灣製造業的材料與工藝。"},{title:"生命樹建築",text:"大型木構結構向上延伸，搭配環繞動線形成室內地標；先從地面觀看整體比例，再依身體狀況決定是否使用高處設施。"},{title:"教育與互動",text:"文化展示與手作活動將參觀從商品陳列延伸到材料、設計和地方文化。"}],
+      route:["抵達工業南六路6號並確認當日票務及活動", "先在大廳從地面觀察生命樹木構與採光", "依開放動線閱讀製程及文化展示", "視興趣預約或參加符合資格的互動體驗", "利用館內休息設施後離館，再獨立導航至猴探井或市區"],
+      guidelines:["高處及攀爬體驗遵守年齡、身高與安全裝備規定", "展品與工廠設備非開放操作時勿觸碰", "部分課程需預約與額外付費", "服從館內人員與人流疏導指示"],
+      photoSpots:["大廳地面：由下往上拍生命樹結構", "公開步行區：利用木構與採光形成層次", "展示區：只在允許攝影的位置拍製程與設計作品"],
+      lodging:"若安排南投市區與八卦山隔日遊，建議在南投市或草屯查詢有合法登記的旅宿；工廠不是住宿設施。",reviews:"請由本頁專屬 Google Maps 景點入口查看半山夢工廠當期評論與營業資訊；不借用猴探井的星等或評價數。",checkedAt:"2026-11-17；觀光署、經濟部創意生活網與南投旅遊網",
+    },
+    facts:[{value:"室內",label:"雨天替代行程"},{value:"工業南六路6號",label:"獨立導航"}],
+    sections:[{title:"歷史與產業背景",body:"半山夢工廠由收納製造企業樹德推動，將工業製造、生活設計及文化教育融入觀光場域。和傳統公園不同，展區和設施運作與門票依營運單位管理。"},{title:"建築特色與觀察重點",body:"挑高空間的生命樹木構是主要視覺核心。可從地面觀察結構節點、迴旋步道及採光，也可留意工業設備與展示如何透過室內動線連結。"},{title:"親子與不同體力的參觀方式",body:"親子可優先安排平面展示與符合年齡的手作；長輩及畏高者可以留在地面欣賞建築，不必參與極限設施。參與活動前詢問場館人員。"},{title:"參考來源",body:"經濟部創意生活網 https://keid.nat.gov.tw/creativelife/information/enjoy_ct?id=205；交通部觀光署 https://www.taiwan.net.tw/m1.aspx?id=A12-00693&sNo=0001016；查閱2026-11-17。"}],
+    faqs:[{question:"半山夢工廠和猴探井是同一個園區嗎？",answer:"不是。半山夢工廠是南崗工業區的民營室內觀光工廠，猴探井天空之橋是八卦山戶外吊橋景點，地址與管理不同。"},{question:"雨天可以去半山夢工廠嗎？",answer:"室內展區較不受小雨影響，但仍需確認是否開館，極限設施可能有獨立管制。"},{question:"生命樹需要另外買票嗎？",answer:"館內入場與不同設施可能採不同票務，實際價格及限制請以場館當日公告為準。"}],
+    related:["nearby","attractions/route-139","attractions/zhongxing-new-village","visit","routes/half-day-trip"],
   },
 ];
 
