@@ -305,7 +305,7 @@ export const pages: ContentPage[] = [
   },
   {
     slug: "nearby",
-    title: "猴探井附近景點推薦｜微熱山丘、中興新村與南投半日遊",
+    title: "猴探井天空之橋附近景點｜微熱山丘、中興新村與 139 縣道順遊",
     shortTitle: "附近景點",
     description:
       "猴探井天空之橋附近景點推薦：微熱山丘、中興新村、139 縣道與南投市區的建議停留時長、導航方式與半日遊安排順序，出發前一次規劃。",
@@ -357,11 +357,11 @@ export const pages: ContentPage[] = [
     ],
     callout:
       "建議安排順序：微熱山丘（午後前）→ 中興新村散步 → 139 縣道觀景 → 猴探井走橋與夕陽 → 南投市區晚餐。各點營業與道路狀況可能調整，出發前逐一查看當日資訊。",
-    related: ["routes/half-day-trip", "routes/route-139", "transport"],
+    related: ["attractions/sunny-hills", "attractions/zhongxing-new-village", "routes/half-day-trip", "routes/route-139", "transport"],
   },
   {
     slug: "history",
-    title: "猴探井故事與名稱由來｜為什麼叫猴探井？微笑天梯的由來",
+    title: "猴探井故事與名稱由來｜猴探井為什麼這樣叫？微笑天梯歷史",
     shortTitle: "名稱與故事",
     description:
       "猴探井故事與名稱由來：為什麼叫猴探井？「猴子探井」八卦山風水靈穴傳說，再到 2012 年啟用、全長 204 公尺 265 階的天空之橋，以及「微笑天梯」別名的山谷地形背景。",
@@ -420,7 +420,7 @@ export const pages: ContentPage[] = [
           "猴探井天空之橋自 2012 年啟用，用來串聯八卦山兩側的觀景與步道。確切的工程與啟用紀錄以官方觀光單位公告為準。",
       },
     ],
-    related: ["visit", "nearby", "sunset"],
+    related: ["visit", "nearby", "guides/houtanjing-name-origin", "sunset"],
   },
   {
     slug: "faq",
@@ -629,7 +629,7 @@ export const pages: ContentPage[] = [
       },
     ],
     callout: "139 縣道是熱門騎乘路線；不在彎道、路肩或出入口臨停拍照。",
-    related: ["nearby", "transport", "sunset"],
+    related: ["nearby", "attractions/sunny-hills", "transport", "sunset"],
   },
   {
     slug: "routes/half-day-trip",
@@ -669,7 +669,7 @@ export const pages: ContentPage[] = [
     ],
     callout:
       "可於 Google 地圖依序加入「微熱山丘 南投 → 139 縣道 觀景點 → 猴探井天空之橋 → 南投市區」形成多點路線；時間為一般預估，請依當日人潮、天候與園區開放狀態調整。",
-    related: ["nearby", "sunset", "guides/how-long-to-stay"],
+    related: ["nearby", "attractions/sunny-hills", "sunset", "guides/how-long-to-stay"],
   },
   {
     slug: "routes/family-trip",
@@ -703,6 +703,69 @@ export const pages: ContentPage[] = [
     ],
     callout: "幼童需由成人牽行；任何人不舒服，都可以選擇不過橋。",
     related: ["accessibility", "visit", "nearby"],
+  },
+  {
+    slug: "attractions/sunny-hills",
+    title: "微熱山丘南投三合院附近景點｜猴探井天空之橋、139 縣道順遊攻略",
+    shortTitle: "微熱山丘周邊順遊",
+    description: "到南投微熱山丘吃鳳梨酥後還能去哪？整理猴探井天空之橋、八卦山 139 縣道、中興新村的行程順序、交通與雨天備案。",
+    eyebrow: "八卦山沿線景點",
+    lead: "微熱山丘南投三合院與猴探井天空之橋都位在南投八卦山旅行軸線。前者適合短暫休息與伴手禮，後者主打山谷階梯吊橋；串聯時不必趕行程。",
+    image: "bridge",
+    facts: [{ value: "139 縣道", label: "串聯路線" }, { value: "兩種體驗", label: "伴手禮與山谷吊橋" }],
+    sections: [
+      { title: "探索微熱山丘周邊", body: "微熱山丘以南投土鳳梨酥與三合院門市聞名，猴探井天空之橋則位於南投市福山里。南投旅遊網將這兩處放在八卦山休閒軸線內，適合規劃成同一趟自駕順遊。" },
+      { title: "遊覽建議：先休息，後走橋", body: "上午先到微熱山丘短停，補水並確認當日營業資訊；午後前往猴探井，沿園區指示步行。若想欣賞夕陽，請在營業結束前預留足夠的回程時間。", items: ["微熱山丘南投三合院：伴手禮與短暫休息", "139 縣道：沿途觀察山稜風景，勿於彎道臨停", "猴探井天空之橋：265 階梯吊橋與夕陽谷景觀"] },
+      { title: "基本資訊與位置", body: "微熱山丘南投三合院位於南投市八卦山一帶；導航請搜尋「微熱山丘 南投三合院」。猴探井天空之橋地址為南投縣南投市猴探井街 300 號，兩地請分別使用專屬地圖搜尋，避免只導航到 139 縣道中途。" },
+      { title: "交通與停車", body: "以自駕或預約接送較方便；沿線假日車流、單車與機車都可能較多。兩處停車規則各自不同，請以店家及園區現場公告為準。", items: ["微熱山丘地圖：https://www.google.com/maps/search/?api=1&query=微熱山丘南投三合院", "猴探井導航：https://maps.app.goo.gl/eZ2QsudhgvX6xkzR8"] },
+      { title: "歷史、文化與景觀特色", body: "微熱山丘反映南投鳳梨食品與地方伴手禮文化；天空之橋則依山谷高低差設計為階梯吊橋，長約 204 公尺、265 階，從側面看有「微笑天梯」的弧線。兩站的看點不同，能讓半日遊內容更豐富。" },
+      { title: "拍照位置與雨天備案", body: "微熱山丘以門市建築與庭院氛圍為主，天空之橋則適合拍橋身縱深與遠方平原。雨後不要為了取景停在濕滑橋面；若橋梁因天候管制，可改到南投市區或中興新村安排室內與平地行程。" },
+      { title: "資料來源", body: "參考：南投旅遊網「微熱山丘」https://travel.nantou.gov.tw/attractions/sunnyhills/；南投旅遊網「七大軸線」https://travel.nantou.gov.tw/7tour/；參山國家風景區管理處「猴探井天空之橋」https://www.trimt-nsa.gov.tw/zh-tw/attraction/19/。資料查閱：2026-11-17；營業與票價以現場為準。" },
+    ],
+    faqs: [
+      { question: "微熱山丘和猴探井適合同一天去嗎？", answer: "適合。兩者都在南投八卦山旅遊軸線，可搭配 139 縣道規劃半日順遊；實際車程請依出發當天導航。" },
+      { question: "兩處能直接步行往返嗎？", answer: "不建議將山區道路當成一般市區步行路線；請先查閱地圖、道路與人行環境，通常以車輛移動較有彈性。" },
+      { question: "下雨天還能走天空之橋嗎？", answer: "雨天可能濕滑或暫停開放。請先確認現場公告，不要把橋上行程視為保證可完成。" },
+    ],
+    related: ["nearby", "routes/half-day-trip", "parking", "attractions/zhongxing-new-village"],
+  },
+  {
+    slug: "attractions/zhongxing-new-village",
+    title: "中興新村與猴探井天空之橋一日遊｜南投親子散步、八卦山路線",
+    shortTitle: "中興新村順遊",
+    description: "中興新村與猴探井天空之橋如何順遊？整理平地散步、午餐、八卦山階梯吊橋、長輩親子動線、交通與雨天安排。",
+    eyebrow: "南投市周邊",
+    lead: "如果同行者有長輩或幼童，可以把中興新村的平地散步放在前段，再把猴探井天空之橋當作可彈性取捨的午後選項。",
+    image: "sunset",
+    sections: [
+      { title: "兩站的旅遊特色", body: "中興新村以省府時期的聚落街廓、綠蔭和步行氛圍見長；猴探井位於八卦山稜線，有橫跨山谷的階梯式吊橋。前者適合慢慢走，後者需要衡量高度、階梯與天候。" },
+      { title: "建議一日路線", items: ["上午：中興新村街廓與綠蔭散步", "中午：南投市區用餐與補水", "午後：前往猴探井，先在入口評估是否過橋", "傍晚：若園區仍開放且天候良好，再安排夕陽拍照"] },
+      { title: "交通、地址與地圖", body: "中興新村導航請搜尋「中興新村 南投」，依當天實際想走的區域選擇目的地；猴探井天空之橋地址為南投縣南投市猴探井街 300 號。山區道路與市區停車性質不同，請各自核對車位及限制。" },
+      { title: "親子與長輩的取捨", body: "猴探井吊橋共有 265 階，不適合推嬰兒車或以輪椅完整過橋。若膝蓋不適、恐高或午後雷雨，保留中興新村散步與市區活動即可，不必強行完成吊橋。" },
+      { title: "文化背景與拍照重點", body: "中興新村的省府歷史與街道景觀，適合觀察聚落空間；猴探井的工程特色則在依高低差跨越山谷的梯子吊橋。拍照時別站在馬路或阻擋橋面通行。" },
+      { title: "資料與行前核對", body: "南投旅遊網的七大旅遊軸線將中興新村、猴探井列為相關景點：https://travel.nantou.gov.tw/7tour/；橋梁資料見參山國家風景區管理處：https://www.trimt-nsa.gov.tw/zh-tw/attraction/19/。查閱日期 2026-11-17。交通與營業狀態出發前再核實。" },
+    ],
+    faqs: [{ question: "中興新村與天空之橋適合親子同遊嗎？", answer: "適合採彈性安排，但吊橋有大量階梯，嬰兒車與輪椅不宜完整通過。" }, { question: "如果只想平地散步呢？", answer: "可以把中興新村作為主要行程，猴探井只在同行者體力與天候允許時加入。" }],
+    related: ["routes/family-trip", "nearby", "attractions/sunny-hills", "accessibility"],
+  },
+  {
+    slug: "guides/houtanjing-name-origin",
+    title: "猴探井為什麼叫猴探井？地名傳說、夕陽谷與微笑天梯的故事",
+    shortTitle: "猴探井名稱由來",
+    description: "解答猴探井故事與名稱由來：猴群探井的地形意象、地方傳說與可考的天空之橋工程特色，分清傳說和景點事實。",
+    eyebrow: "地名與地方記憶",
+    lead: "「猴探井」不是吊橋建好後才有的名稱；天空之橋讓更多旅客認識這片八卦山谷，也讓既有地名多了一個容易辨識的景觀符號。",
+    image: "bridge",
+    sections: [
+      { title: "猴探井名稱怎麼來？", body: "地方流傳以猴子俯身探看深井的形象描述山谷地貌，這類說法屬地名傳說，不應直接當作有文獻確證的事件。走到觀景位置時，可觀察層層起伏的山稜與谷地。" },
+      { title: "關於猴探井遊憩區", body: "猴探井遊憩區位於南投市福山里，為八卦山風景區的一部分，因夕照視野而有「夕陽谷」美名。南投旅遊網將遊憩區與天空之橋分別介紹。" },
+      { title: "天空之橋為何又叫微笑天梯？", body: "橋梁跨越谷地兩端，因地勢高低差而採階梯吊橋形式。參山國家風景區管理處記載全長 204 公尺、265 階；側看弧形橋身像掛在山谷上方的一抹微笑，因此有「微笑天梯」之稱。" },
+      { title: "走訪時可以觀察什麼", items: ["山谷兩側的地形落差與橋梁接點", "橋面階梯與欄杆的工程設計", "夕陽時平原與谷地的光線變化", "遊憩區內的觀景設施與導覽說明"] },
+      { title: "位置、交通與現場提醒", body: "地址：南投縣南投市猴探井街 300 號。建議由 139 縣道依導航與現場指示抵達。吊橋開放與門票可能變動；現場如有導覽牌或管理公告，應優先核對。" },
+      { title: "參考來源與傳說辨識", body: "地形與遊憩區介紹：南投旅遊網 https://travel.nantou.gov.tw/attractions/houtanjing-scenic-area/；橋梁尺寸與工程特色：參山國家風景區管理處 https://www.trimt-nsa.gov.tw/zh-tw/attraction/19/。查閱 2026-11-17。地名意象作為地方說法呈現，不作史實斷言。" },
+    ],
+    faqs: [{ question: "猴探井真的有猴子和水井嗎？", answer: "名稱由來常以猴子探井的地形意象解釋，但不能因此斷言現場仍有特定古井或野生猴群。" }, { question: "猴探井和天空之橋是同一個地方嗎？", answer: "猴探井是地區與遊憩區名稱，天空之橋則是其中知名的階梯吊橋設施。" }],
+    related: ["history", "visit", "sunset", "nearby"],
   },
 ];
 
