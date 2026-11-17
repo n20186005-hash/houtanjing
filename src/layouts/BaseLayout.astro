@@ -35,6 +35,11 @@ const pageTitle = title.includes(site.name) ? title : `${title}｜${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url).toString();
 const absoluteImage = new URL(image, site.url).toString();
 const currentPath = Astro.url.pathname;
+const utilityPages = new Set([
+  "/privacy-policy", "/terms-of-service", "/cookie-settings",
+  "/sources", "/image-credits", "/reviews",
+]);
+const showMobileMapBar = !utilityPages.has(currentPath.replace(/\/$/, ""));
 
 // 預設 FAQ（用於 FAQPage JSON-LD，僅在有傳入或本頁有 FAQ 時輸出）
 const defaultFaqs: FAQ[] = faqs ?? [];
@@ -222,7 +227,7 @@ void googleExternalLinks;
       <slot />
     </main>
     <Footer />
-    <MobileMapBar />
+    {showMobileMapBar && <MobileMapBar />}
     <script is:inline>
       // PWA Service Worker（新增 PWA 支援）：靜態資源快取、離線可用
       if ("serviceWorker" in navigator) {
