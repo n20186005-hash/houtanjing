@@ -1,0 +1,21 @@
+---
+interface Props {
+  value: string;
+}
+
+const { value } = Astro.props;
+const pieces = value.split(/(https?:\/\/[^\s，。；、）)]+)/g);
+const isLink = (part: string) => /^https?:\/\//.test(part);
+const labelFor = (url: string) => {
+  const host = new URL(url).hostname;
+  if (host.includes("google.com") || host.includes("maps.app.goo.gl")) return "開啟 Google 地圖 ↗";
+  if (host.includes("ndc.gov.tw")) return "國家發展委員會資料 ↗";
+  if (host.includes("nchdb.boch.gov.tw")) return "國家文化資產網資料 ↗";
+  if (host.includes("travel.nantou.gov.tw")) return "南投旅遊網資料 ↗";
+  if (host.includes("trimt-nsa.gov.tw")) return "參山國家風景區資料 ↗";
+  if (host.includes("keid.nat.gov.tw")) return "經濟部創意生活網資料 ↗";
+  if (host.includes("taiwan.net.tw")) return "交通部觀光署資料 ↗";
+  return "查看參考連結 ↗";
+};
+---
+{pieces.map((part) => isLink(part) ? <a href={part} target="_blank" rel="noopener noreferrer">{labelFor(part)}</a> : part)}
