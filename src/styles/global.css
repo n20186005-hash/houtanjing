@@ -1124,6 +1124,8 @@ summary {
 .article-main {
   display: grid;
   gap: 72px;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .content-section {
